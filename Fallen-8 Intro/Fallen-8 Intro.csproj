@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Benchmark.cs" />
+    <Compile Include="Config.cs" />
     <Compile Include="IntroProvider.cs" />
     <Compile Include="Import.cs" />
     <Compile Include="Program.cs" />

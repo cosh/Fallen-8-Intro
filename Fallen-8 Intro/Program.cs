@@ -21,6 +21,8 @@ namespace Intro
 
             Import.ImportFromMySql(fallen8, index);
 
+            Benchmark.RunQuery2(fallen8, index);
+
             //var introProvicer = new IntroProvider(fallen8);
             //int nodeCount = 100000;
             //int edgeCount = 10;

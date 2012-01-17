@@ -12,19 +12,16 @@ using System.Diagnostics;
 namespace Intro
 {
     public class Import
-    {
-        public const String HOST = "localhost";
-        public const String USER = "root";
-        public const String PASSWORD = "password";
-
-        public const String DATABASE = "deu_news_2009_1M";
-
-
+    {        
         public static void ImportFromMySql(IFallen8 myFallen8, IIndex nodeIndex)
         {            
             #region Connect to MySql
 
-            var connectionString = String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3}", HOST, DATABASE, USER, PASSWORD);
+            var connectionString = String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3}", 
+                Config.HOST, 
+                Config.DATABASE, 
+                Config.USER, 
+                Config.PASSWORD);
 
             var connection = new MySqlConnection(connectionString);
             connection.Open();
@@ -37,13 +34,13 @@ namespace Intro
 
             // import words
             Stopwatch sw = Stopwatch.StartNew();
-            ReadWords(myFallen8, connection, nodeIndex, "words");
+            ReadWords(myFallen8, connection, nodeIndex, Config.TABLE_WORDS);
             Console.WriteLine("took {0} ms", sw.Elapsed.TotalMilliseconds);
             sw.Restart();
-            ReadCooccurrences(myFallen8, connection, nodeIndex, "co_n", 23L);
+            ReadCooccurrences(myFallen8, connection, nodeIndex, Config.TABLE_CO_N, Config.CO_N_EDGE_PROPERTY_ID);
             Console.WriteLine("took {0} ms", sw.Elapsed.TotalMilliseconds);
             sw.Restart();
-            ReadCooccurrences(myFallen8, connection, nodeIndex, "co_s", 42L);
+            ReadCooccurrences(myFallen8, connection, nodeIndex, Config.TABLE_CO_S, Config.CO_S_EDGE_PROPERTY_ID);
             Console.WriteLine("took {0} ms", sw.Elapsed.TotalMilliseconds);
             sw.Stop();
 
@@ -78,8 +75,8 @@ namespace Intro
 
                 vertex = myFallen8.CreateVertex(
                        new VertexModelDefinition(creationDate)
-                        .AddProperty(0L, w_id)
-                        .AddProperty(1L, word)
+                        .AddProperty(Config.W_ID_PROPERTY_ID, w_id)
+                        .AddProperty(Config.WORD_PROPERTY_ID, word)
                 );
 
                 nodeIndex.AddOrUpdate(w_id, vertex);
@@ -131,8 +128,8 @@ namespace Intro
                 // create edge
 
                 myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate)
-                .AddProperty(0L, freq)
-                .AddProperty(1L, sig));              
+                    .AddProperty(Config.FREQ_PROPERTY_ID, freq)
+                    .AddProperty(Config.SIG_PROPERTY_ID, sig));              
             }
             reader.Close();
             Console.WriteLine("done");
