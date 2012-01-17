@@ -121,7 +121,47 @@ namespace Intro
             }
 
         }
-       
+
+        /// <summary>
+        /// Finds all edges between the neighbours of the given start vertex.
+        /// </summary>
+        /// <param name="startVertex"></param>
+        /// <param name="myEdgePropertyID"></param>
+        private static void Query3_v2(IVertexModel startVertex, long myEdgePropertyID)
+        {
+            Object sig;
+            Object freq;
+
+            long sourceVertexID;
+            long targetVertexID;
+
+            List<IVertexModel> neighbors;
+
+            IEdgePropertyModel edgeProperty1;
+
+            if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
+            {
+                neighbors = new List<IVertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
+                var neighborIDs = new HashSet<Int64>(neighbors.Select(_ => _.Id));
+
+                Parallel.ForEach(neighbors, aNeighbor =>
+                {
+                    IEnumerable<IEdgeModel> incomingEdges;
+                    if (aNeighbor.TryGetInEdges(out incomingEdges, myEdgePropertyID))
+                    {
+                        foreach (var aRelevantEdge in incomingEdges.Where(_ => neighborIDs.Contains(_.SourceEdgeProperty.SourceVertex.Id)))
+                        {
+                            sourceVertexID = aRelevantEdge.SourceEdgeProperty.SourceVertex.Id;
+                            targetVertexID = aRelevantEdge.TargetVertex.Id;
+                            aRelevantEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
+                            aRelevantEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
+                        }
+                    }
+                });
+            }
+
+        }
+
         public static void RunQuery2(IFallen8 myFallen8, IIndex nodeIndex)
         {
             IEnumerable<IGraphElementModel> vertices;
