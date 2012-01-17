@@ -24,6 +24,11 @@ namespace Intro
             10738,  11269,  16267,  20918,  3788,   20138,  16991,  10438,  15575,  13652
         };
 
+        /// <summary>
+        /// Finds all edges with distance 2 from start vertex
+        /// </summary>
+        /// <param name="startVertex"></param>
+        /// <param name="myEdgePropertyID"></param>
         private static void Query2(IVertexModel startVertex, long myEdgePropertyID)
         {            
             Object sig;
@@ -57,6 +62,60 @@ namespace Intro
             }
         }
 
+        /// <summary>
+        /// Finds all edges between the neighbours of the given start vertex.
+        /// </summary>
+        /// <param name="startVertex"></param>
+        /// <param name="myEdgePropertyID"></param>
+        private static void Query3(IVertexModel startVertex, long myEdgePropertyID)
+        {
+            Object sig;
+            Object freq;
+
+            long sourceVertexID;
+            long targetVertexID;
+
+            IEdgePropertyModel edgeProperty1, edgeProperty2;
+
+            if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
+            {
+                foreach (var aTargetVertex1 in edgeProperty1.Select(_ => _.TargetVertex))
+                {
+                    foreach (var aTargetVertex2 in edgeProperty1.Select(_ => _.TargetVertex))
+                    {
+                        if (aTargetVertex1.Id == aTargetVertex2.Id)
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if (aTargetVertex1.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
+                            {
+                                foreach (var aEdge in edgeProperty2)
+                                {
+                                    if (aEdge.TargetVertex.Id == aTargetVertex2.Id)
+                                    {
+                                        sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
+                                        targetVertexID = aEdge.TargetVertex.Id;
+                                        aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
+                                        aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
+
+                                        //Console.WriteLine(String.Format("[{0},{1},{2},{3}]",
+                                        //    sourceVertexID,
+                                        //    targetVertexID,
+                                        //    sig,
+                                        //    freq));
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+		
+        }
+       
         public static void RunQuery2(IFallen8 myFallen8, IIndex nodeIndex)
         {
             IEnumerable<IGraphElementModel> vertices;
@@ -71,6 +130,26 @@ namespace Intro
 
                     sw.Start();
                     Query2(vertex, Config.CO_S_EDGE_PROPERTY_ID);
+                    Console.WriteLine(Math.Round(sw.Elapsed.TotalMilliseconds));
+                    sw.Reset();
+                }
+            }
+        }
+
+        public static void RunQuery3(IFallen8 myFallen8, IIndex nodeIndex)
+        {
+            IEnumerable<IGraphElementModel> vertices;
+            IVertexModel vertex;
+            Stopwatch sw = new Stopwatch();
+
+            for (int i = 0; i < w_ids.Length; i++)
+            {
+                if (nodeIndex.GetValue(out vertices, w_ids[i]))
+                {
+                    vertex = (IVertexModel)vertices.First();
+
+                    sw.Start();
+                    Query3(vertex, Config.CO_S_EDGE_PROPERTY_ID);
                     Console.WriteLine(Math.Round(sw.Elapsed.TotalMilliseconds));
                     sw.Reset();
                 }

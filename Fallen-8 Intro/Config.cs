@@ -11,7 +11,7 @@ namespace Intro
         public const String USER = "root";
         public const String PASSWORD = "password";
 
-        public const String DATABASE = "deu_news_2009_300K";
+        public const String DATABASE = "deu_news_2009_1M";
         public const String TABLE_WORDS = "words";
         public const String TABLE_CO_N = "co_n";
         public const String TABLE_CO_S = "co_s";
