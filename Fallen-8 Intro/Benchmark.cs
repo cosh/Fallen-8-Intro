@@ -135,21 +135,20 @@ namespace Intro
             long sourceVertexID;
             long targetVertexID;
 
-            List<IVertexModel> neighbors;
+            HashSet<IVertexModel> neighbors;
 
             IEdgePropertyModel edgeProperty1;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
-                neighbors = new List<IVertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
-                var neighborIDs = new HashSet<Int64>(neighbors.Select(_ => _.Id));
+                neighbors = new HashSet<IVertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
 
                 Parallel.ForEach(neighbors, aNeighbor =>
                 {
                     IEnumerable<IEdgeModel> incomingEdges;
                     if (aNeighbor.TryGetInEdges(out incomingEdges, myEdgePropertyID))
                     {
-                        foreach (var aRelevantEdge in incomingEdges.Where(_ => neighborIDs.Contains(_.SourceEdgeProperty.SourceVertex.Id)))
+                        foreach (var aRelevantEdge in incomingEdges.Where(_ => neighbors.Contains(_.SourceEdgeProperty.SourceVertex)))
                         {
                             sourceVertexID = aRelevantEdge.SourceEdgeProperty.SourceVertex.Id;
                             targetVertexID = aRelevantEdge.TargetVertex.Id;
