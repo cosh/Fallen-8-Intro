@@ -6,6 +6,7 @@ using Fallen8.API;
 using Fallen8.API.Index;
 using Fallen8.Model;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Intro
 {
@@ -75,45 +76,50 @@ namespace Intro
             long sourceVertexID;
             long targetVertexID;
 
-            IEdgePropertyModel edgeProperty1, edgeProperty2;
+            List<IVertexModel> neighbors;
+
+            IEdgePropertyModel edgeProperty1;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
-                foreach (var aTargetVertex1 in edgeProperty1.Select(_ => _.TargetVertex))
-                {
-                    foreach (var aTargetVertex2 in edgeProperty1.Select(_ => _.TargetVertex))
-                    {
-                        if (aTargetVertex1.Id == aTargetVertex2.Id)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            if (aTargetVertex1.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
-                            {
-                                foreach (var aEdge in edgeProperty2)
-                                {
-                                    if (aEdge.TargetVertex.Id == aTargetVertex2.Id)
-                                    {
-                                        sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
-                                        targetVertexID = aEdge.TargetVertex.Id;
-                                        aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
-                                        aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
+                neighbors = new List<IVertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
 
-                                        //Console.WriteLine(String.Format("[{0},{1},{2},{3}]",
-                                        //    sourceVertexID,
-                                        //    targetVertexID,
-                                        //    sig,
-                                        //    freq));
+                Parallel.ForEach(neighbors, aNeighbor =>
+                    {
+                        foreach (var aTargetVertex2 in neighbors)
+                        {
+                            if (aNeighbor.Id == aTargetVertex2.Id)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                IEdgePropertyModel edgeProperty2;
+                                if (aNeighbor.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
+                                {
+                                    foreach (var aEdge in edgeProperty2)
+                                    {
+                                        if (aEdge.TargetVertex.Id == aTargetVertex2.Id)
+                                        {
+                                            sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
+                                            targetVertexID = aEdge.TargetVertex.Id;
+                                            aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
+                                            aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
+
+                                            //Console.WriteLine(String.Format("[{0},{1},{2},{3}]",
+                                            //    sourceVertexID,
+                                            //    targetVertexID,
+                                            //    sig,
+                                            //    freq));
+                                        }
                                     }
                                 }
-                            }
 
+                            }
                         }
-                    }
-                }
+                    });
             }
-		
+
         }
        
         public static void RunQuery2(IFallen8 myFallen8, IIndex nodeIndex)
