@@ -60,14 +60,6 @@
       <Project>{40759EF1-EBF9-41A3-BFEB-1314ABE36489}</Project>
       <Name>Fallen-8 %28Dependencies\Fallen-8\Fallen-8%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Dependencies\Fallen-8\IFallen-8\IFallen-8.csproj">
-      <Project>{259E1EFF-FC9A-4674-A4C6-D93490C4AC99}</Project>
-      <Name>IFallen-8</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Dependencies\Fallen-8\Model\Model.csproj">
-      <Project>{E0145191-CC23-42ED-945E-B343D49CAA8E}</Project>
-      <Name>Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

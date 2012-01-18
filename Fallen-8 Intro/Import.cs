@@ -62,7 +62,7 @@ namespace Intro
             String word;
             Int32 w_id;
             DateTime creationDate = DateTime.Now;
-            IVertexModel vertex;
+            VertexModel vertex;
 
             Console.WriteLine("importing {0} words from {1}", GetMySqlRowCount(mySql, tableName), tableName);
 
@@ -98,11 +98,11 @@ namespace Intro
             Int32 freq;
             Double sig;
 
-            IEnumerable<IGraphElementModel> sources;
-            IEnumerable<IGraphElementModel> targets;
+            IEnumerable<AGraphElement> sources;
+            IEnumerable<AGraphElement> targets;
 
-            IVertexModel source = null;
-            IVertexModel target = null;
+            VertexModel source = null;
+            VertexModel target = null;
 
             Console.WriteLine("importing {0} co-occurrences from {1}", GetMySqlRowCount(mySql, tableName), tableName);
 
@@ -117,12 +117,12 @@ namespace Intro
 
                 if (nodeIdx.GetValue(out sources, w1_id))
                 {
-                    source = (IVertexModel) sources.First();
+                    source = (VertexModel) sources.First();
                 }
 
                 if (nodeIdx.GetValue(out targets, w2_id))
                 {
-                    target = (IVertexModel) targets.First();
+                    target = (VertexModel) targets.First();
                 }
 
                 // create edge

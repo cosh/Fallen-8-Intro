@@ -30,7 +30,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query2(IVertexModel startVertex, long myEdgePropertyID)
+        private static void Query2(VertexModel startVertex, long myEdgePropertyID)
         {            
             Object sig;
             Object freq;
@@ -38,7 +38,7 @@ namespace Intro
             long sourceVertexID;
             long targetVertexID;
 
-            IEdgePropertyModel edgeProperty1, edgeProperty2;
+            EdgePropertyModel edgeProperty1, edgeProperty2;
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
                 foreach (var aTargetVertex in edgeProperty1.Select(_ => _.TargetVertex))
@@ -68,7 +68,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3(IVertexModel startVertex, long myEdgePropertyID)
+        private static void Query3(VertexModel startVertex, long myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -76,13 +76,13 @@ namespace Intro
             long sourceVertexID;
             long targetVertexID;
 
-            List<IVertexModel> neighbors;
+            List<VertexModel> neighbors;
 
-            IEdgePropertyModel edgeProperty1;
+            EdgePropertyModel edgeProperty1;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
-                neighbors = new List<IVertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
+                neighbors = new List<VertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
 
                 Parallel.ForEach(neighbors, aNeighbor =>
                     {
@@ -94,7 +94,7 @@ namespace Intro
                             }
                             else
                             {
-                                IEdgePropertyModel edgeProperty2;
+                                EdgePropertyModel edgeProperty2;
                                 if (aNeighbor.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
                                 {
                                     foreach (var aEdge in edgeProperty2)
@@ -127,7 +127,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3_v2(IVertexModel startVertex, long myEdgePropertyID)
+        private static void Query3_v2(VertexModel startVertex, long myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -135,17 +135,17 @@ namespace Intro
             long sourceVertexID;
             long targetVertexID;
 
-            HashSet<IVertexModel> neighbors;
+            HashSet<VertexModel> neighbors;
 
-            IEdgePropertyModel edgeProperty1;
+            EdgePropertyModel edgeProperty1;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
-                neighbors = new HashSet<IVertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
+                neighbors = new HashSet<VertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
 
                 Parallel.ForEach(neighbors, aNeighbor =>
                 {
-                    IEnumerable<IEdgeModel> incomingEdges;
+                    IEnumerable<EdgeModel> incomingEdges;
                     if (aNeighbor.TryGetInEdges(out incomingEdges, myEdgePropertyID))
                     {
                         foreach (var aRelevantEdge in incomingEdges.Where(_ => neighbors.Contains(_.SourceEdgeProperty.SourceVertex)))
@@ -166,7 +166,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3_old(IVertexModel startVertex, long myEdgePropertyID)
+        private static void Query3_old(VertexModel startVertex, long myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -174,7 +174,7 @@ namespace Intro
             long sourceVertexID;
             long targetVertexID;
 
-            IEdgePropertyModel edgeProperty1, edgeProperty2;
+            EdgePropertyModel edgeProperty1, edgeProperty2;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
@@ -220,7 +220,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3_1st(IVertexModel startVertex, long myEdgePropertyID)
+        private static void Query3_1st(VertexModel startVertex, long myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -228,7 +228,7 @@ namespace Intro
             long sourceVertexID;
             long targetVertexID;
 
-            IEdgePropertyModel edgeProperty1, edgeProperty2;
+            EdgePropertyModel edgeProperty1, edgeProperty2;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
@@ -272,15 +272,15 @@ namespace Intro
 
         public static void RunQuery2(IFallen8 myFallen8, IIndex nodeIndex)
         {
-            IEnumerable<IGraphElementModel> vertices;
-            IVertexModel vertex;
+            IEnumerable<AGraphElement> vertices;
+            VertexModel vertex;
             Stopwatch sw = new Stopwatch();
 
             for (int i = 0; i < w_ids.Length; i++)
             {
                 if (nodeIndex.GetValue(out vertices, w_ids[i]))
                 {
-                    vertex = (IVertexModel) vertices.First();
+                    vertex = (VertexModel) vertices.First();
 
                     sw.Start();
                     Query2(vertex, Config.CO_S_EDGE_PROPERTY_ID);
@@ -292,15 +292,15 @@ namespace Intro
 
         public static void RunQuery3(IFallen8 myFallen8, IIndex nodeIndex)
         {
-            IEnumerable<IGraphElementModel> vertices;
-            IVertexModel vertex;
+            IEnumerable<AGraphElement> vertices;
+            VertexModel vertex;
             Stopwatch sw = new Stopwatch();
 
             for (int i = 0; i < w_ids.Length; i++)
             {
                 if (nodeIndex.GetValue(out vertices, w_ids[i]))
                 {
-                    vertex = (IVertexModel)vertices.First();
+                    vertex = (VertexModel)vertices.First();
 
                     sw.Start();
                     Query3_1st(vertex, Config.CO_S_EDGE_PROPERTY_ID);

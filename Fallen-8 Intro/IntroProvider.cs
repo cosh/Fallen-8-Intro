@@ -59,7 +59,7 @@ namespace Intro
 
             #region out edges
 
-            IEdgePropertyModel edgeProperty;
+            EdgePropertyModel edgeProperty;
             if (vertex.TryGetOutEdge(out edgeProperty, _edgePropertyId))
             {
                 foreach (var aTargetVertex in edgeProperty.Select(_ => _.TargetVertex))
@@ -77,7 +77,7 @@ namespace Intro
 
             #region inc edges
 
-            IEnumerable<IEdgeModel> incomingEdges;
+            IEnumerable<EdgeModel> incomingEdges;
             if (vertex.TryGetInEdges(out incomingEdges, _edgePropertyId))
             {
                 foreach (var aIncomingVertex in incomingEdges.Select(_ => _.SourceEdgeProperty.SourceVertex))
