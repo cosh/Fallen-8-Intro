@@ -11,33 +11,34 @@ namespace Intro
 {
     class IntroProvider
     {
-        private IFallen8 _fallen8;
-        private long _edgePropertyId;
+        private Fallen8.API.Fallen8 _fallen8;
+        private Int32 _edgePropertyId;
 
-        public IntroProvider(IFallen8 fallen8)
+        public IntroProvider(Fallen8.API.Fallen8 fallen8)
         {
             _fallen8 = fallen8;
-            _edgePropertyId = 0L;
+            _edgePropertyId = 0;
         }
 
         internal void CreateScaleFreeNetwork(int nodeCound, int edgeCount)
         {
             DateTime creationDate = DateTime.Now;
-            List<Int64> vertexIDs = new List<long>();
+            List<Int32> vertexIDs = new List<Int32>();
             Random prng = new Random();
 
             for (int i = 0; i < nodeCound; i++)
             {
                 vertexIDs.Add(
-                    _fallen8.CreateVertex(
-                        new VertexModelDefinition(creationDate)
-                            .AddProperty(23, "Name" + i)
-                            ).Id);
+                    _fallen8.CreateVertex(creationDate, new Dictionary<int,object> 
+                    {
+                        {23, "Name" + i}
+                    }).Id);
+                        
             }
 
             foreach (var aVertexId in vertexIDs)
             {
-                HashSet<Int64> targetVertices = new HashSet<long>();
+                HashSet<Int32> targetVertices = new HashSet<Int32>();
 
                 do
                 {
@@ -46,15 +47,14 @@ namespace Intro
 
                 foreach (var aTargetVertex in targetVertices)
                 {
-                    _fallen8.CreateEdge(aVertexId, _edgePropertyId, new EdgeModelDefinition(aTargetVertex, creationDate)
-                        .AddProperty(42, aTargetVertex % 42));
+                    _fallen8.CreateEdge(aVertexId, _edgePropertyId, new EdgeModelDefinition(aTargetVertex, creationDate, new Dictionary<int, object> { { 42, aTargetVertex % 42 } }));
                 }
             }
         }
 
         internal void TraverseABit()
         {
-            var vertex = _fallen8.Graph.GetVertices().First();
+            var vertex = _fallen8.GetVertices().First();
 
 
             #region out edges

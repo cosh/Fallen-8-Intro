@@ -30,7 +30,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query2(VertexModel startVertex, long myEdgePropertyID)
+        private static void Query2(VertexModel startVertex, Int32 myEdgePropertyID)
         {            
             Object sig;
             Object freq;
@@ -68,7 +68,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3(VertexModel startVertex, long myEdgePropertyID)
+        private static void Query3(VertexModel startVertex, Int32 myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -127,7 +127,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3_v2(VertexModel startVertex, long myEdgePropertyID)
+        private static void Query3_v2(VertexModel startVertex, Int32 myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -166,7 +166,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3_old(VertexModel startVertex, long myEdgePropertyID)
+        private static void Query3_old(VertexModel startVertex, Int32 myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -220,7 +220,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3_1st(VertexModel startVertex, long myEdgePropertyID)
+        private static void Query3_1st(VertexModel startVertex, Int32 myEdgePropertyID)
         {
             Object sig;
             Object freq;
@@ -270,7 +270,7 @@ namespace Intro
         }
 
 
-        public static void RunQuery2(IFallen8 myFallen8, IIndex nodeIndex)
+        public static void RunQuery2(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
         {
             IEnumerable<AGraphElement> vertices;
             VertexModel vertex;
@@ -290,7 +290,7 @@ namespace Intro
             }
         }
 
-        public static void RunQuery3(IFallen8 myFallen8, IIndex nodeIndex)
+        public static void RunQuery3(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
         {
             IEnumerable<AGraphElement> vertices;
             VertexModel vertex;
@@ -307,6 +307,23 @@ namespace Intro
                     Console.WriteLine(Math.Round(sw.Elapsed.TotalMilliseconds));
                     sw.Reset();
                 }
+            }
+        }
+
+        public static void RunQuery32(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
+        {
+            IEnumerable<AGraphElement> vertices;
+            VertexModel vertex;
+            Stopwatch sw = new Stopwatch();
+
+            if (nodeIndex.GetValue(out vertices, w_ids[0]))
+            {
+                vertex = (VertexModel)vertices.First();
+
+                sw.Start();
+                Query3_1st(vertex, Config.CO_S_EDGE_PROPERTY_ID);
+                Console.WriteLine(Math.Round(sw.Elapsed.TotalMilliseconds));
+                sw.Reset();
             }
         }
     }

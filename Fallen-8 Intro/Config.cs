@@ -11,7 +11,7 @@ namespace Intro
         public const String USER = "root";
         public const String PASSWORD = "password";
 
-        public const String DATABASE = "deu_news_2009_1M";
+        public const String DATABASE = "wortschatz";
         public const String TABLE_WORDS = "words";
         public const String TABLE_CO_N = "co_n";
         public const String TABLE_CO_S = "co_s";
@@ -19,18 +19,18 @@ namespace Intro
 
         #region Node properties
 
-        public const long W_ID_PROPERTY_ID = 0L;
-        public const long WORD_PROPERTY_ID = 1L;
-        
-        public const long CO_N_EDGE_PROPERTY_ID = 23L;
-        public const long CO_S_EDGE_PROPERTY_ID = 42L;
+        public const Int32 W_ID_PROPERTY_ID = 0;
+        public const Int32 WORD_PROPERTY_ID = 1;
+
+        public const Int32 CO_N_EDGE_PROPERTY_ID = 23;
+        public const Int32 CO_S_EDGE_PROPERTY_ID = 42;
 
         #endregion
 
         #region Edge properties
 
-        public const long SIG_PROPERTY_ID = 10L;
-        public const long FREQ_PROPERTY_ID = 11L;
+        public const Int32 SIG_PROPERTY_ID = 10;
+        public const Int32 FREQ_PROPERTY_ID = 11;
 
         #endregion
     }

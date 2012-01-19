@@ -12,8 +12,8 @@ using System.Diagnostics;
 namespace Intro
 {
     public class Import
-    {        
-        public static void ImportFromMySql(IFallen8 myFallen8, IIndex nodeIndex)
+    {
+        public static void ImportFromMySql(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
         {            
             #region Connect to MySql
 
@@ -53,7 +53,7 @@ namespace Intro
             #endregion
         }
 
-        private static void ReadWords(IFallen8 myFallen8, MySqlConnection mySql, IIndex nodeIndex, String tableName)
+        private static void ReadWords(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, IIndex nodeIndex, String tableName)
         {            
             // query
             var query = mySql.CreateCommand();
@@ -73,11 +73,11 @@ namespace Intro
                 w_id = reader.GetInt32(0);
                 word = reader.GetString(1);
 
-                vertex = myFallen8.CreateVertex(
-                       new VertexModelDefinition(creationDate)
-                        .AddProperty(Config.W_ID_PROPERTY_ID, w_id)
-                        .AddProperty(Config.WORD_PROPERTY_ID, word)
-                );
+                vertex = myFallen8.CreateVertex(creationDate, new Dictionary<int,object> 
+                { 
+                    {Config.W_ID_PROPERTY_ID, w_id},
+                    {Config.WORD_PROPERTY_ID, word}
+                });
 
                 nodeIndex.AddOrUpdate(w_id, vertex);
             }
@@ -86,7 +86,7 @@ namespace Intro
             Console.WriteLine("done");
         }
 
-        private static void ReadCooccurrences(IFallen8 myFallen8, MySqlConnection mySql, IIndex nodeIdx, String tableName, long edgePropertyID)
+        private static void ReadCooccurrences(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, IIndex nodeIdx, String tableName, Int32 edgePropertyID)
         {
             // query
             var query = mySql.CreateCommand();
@@ -127,9 +127,11 @@ namespace Intro
 
                 // create edge
 
-                myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate)
-                    .AddProperty(Config.FREQ_PROPERTY_ID, freq)
-                    .AddProperty(Config.SIG_PROPERTY_ID, sig));              
+                myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate, new Dictionary<int, object>
+                    {
+                        {Config.FREQ_PROPERTY_ID, freq},
+                        {Config.SIG_PROPERTY_ID, sig},
+                    }));              
             }
             reader.Close();
             Console.WriteLine("done");
