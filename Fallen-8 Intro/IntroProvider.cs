@@ -5,7 +5,7 @@ using System.Text;
 using Fallen8.API;
 using System.Threading.Tasks;
 using Fallen8.API.Helper;
-using Fallen8.Model;
+using Fallen8.API.Model;
 
 namespace Intro
 {

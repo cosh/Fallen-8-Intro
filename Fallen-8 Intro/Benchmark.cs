@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using Fallen8.API;
 using Fallen8.API.Index;
-using Fallen8.Model;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Fallen8.API.Model;
 
 namespace Intro
 {

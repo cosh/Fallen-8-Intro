@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Fallen8.API;
 using MySql.Data.MySqlClient;
 using Fallen8.API.Index;
 using Fallen8.API.Helper;
-using Fallen8.Model;
 using System.Diagnostics;
+using Fallen8.API.Model;
 
 namespace Intro
 {
