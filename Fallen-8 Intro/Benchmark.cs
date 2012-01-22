@@ -290,17 +290,17 @@ namespace Intro
             }
         }
 
-        public static void RunQuery3(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
+        public static void RunQuery3(Fallen8.API.Fallen8 myFallen8, SingleValueIndex nodeIndex)
         {
-            IEnumerable<AGraphElement> vertices;
+            AGraphElement graphElement;
             VertexModel vertex;
             Stopwatch sw = new Stopwatch();
 
             for (int i = 0; i < w_ids.Length; i++)
             {
-                if (nodeIndex.GetValue(out vertices, w_ids[i]))
+                if (nodeIndex.GetValue(out graphElement, w_ids[i]))
                 {
-                    vertex = (VertexModel)vertices.First();
+                    vertex = (VertexModel)graphElement;
 
                     sw.Start();
                     Query3_1st(vertex, Config.CO_S_EDGE_PROPERTY_ID);

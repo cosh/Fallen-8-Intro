@@ -14,7 +14,7 @@ namespace Intro
             var fallen8 = new Fallen8.API.Fallen8();
 
             IIndex index;
-            if (fallen8.IndexFactory.TryCreateIndex(out index, "word_idx"))
+            if (fallen8.IndexFactory.TryCreateIndex(out index, "word_idx", "SingleValueIndex"))
             {
                 Console.WriteLine("created index word_idx");
             }
@@ -24,7 +24,7 @@ namespace Intro
 
             Console.ReadLine();         
             //Benchmark.RunQuery2(fallen8, index);
-            Benchmark.RunQuery3(fallen8, index);
+            Benchmark.RunQuery3(fallen8, (SingleValueIndex)index);
 
             //var introProvicer = new IntroProvider(fallen8);
             //int nodeCount = 100000;
