@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Fallen8.API;
 using System.Threading.Tasks;
 using Fallen8.API.Helper;
 using Fallen8.API.Model;
+using System.Threading;
 
 namespace Intro
 {
@@ -29,10 +32,7 @@ namespace Intro
             for (int i = 0; i < nodeCound; i++)
             {
                 vertexIDs.Add(
-                    _fallen8.CreateVertex(creationDate, new Dictionary<int,object> 
-                    {
-                        {23, "Name" + i}
-                    }).Id);
+                    _fallen8.CreateVertex(creationDate, new Dictionary<int, object> {{23, 4344}, {33, "asdasd"}}).Id);
                         
             }
 
@@ -47,7 +47,7 @@ namespace Intro
 
                 foreach (var aTargetVertex in targetVertices)
                 {
-                    _fallen8.CreateEdge(aVertexId, _edgePropertyId, new EdgeModelDefinition(aTargetVertex, creationDate, new Dictionary<int, object> { { 42, aTargetVertex % 42 } }));
+                    _fallen8.CreateEdge(aVertexId, _edgePropertyId, new EdgeModelDefinition(aTargetVertex, creationDate, null));
                 }
             }
         }
@@ -92,6 +92,72 @@ namespace Intro
             }
             
             #endregion
+        }
+
+        internal void Bench(int myIterations = 1000)
+        {
+            var vertices = _fallen8.GetVertices();
+            var tps = new List<double>();
+            long edgeCount = 0;
+
+            for (int i = 0; i < myIterations; i++)
+            {
+                Stopwatch sw = Stopwatch.StartNew();
+
+                edgeCount = CountAllEdgesParallelPartitioner(vertices);
+
+                sw.Stop();
+
+                tps.Add(edgeCount / sw.Elapsed.TotalSeconds);
+            }
+
+            Console.WriteLine(String.Format("Traversed {0} edges.", edgeCount));
+
+            Console.WriteLine(String.Format("Traversed {0} edges. Average: {1}TPS Median: {2}TPS StandardDeviation {3}TPS ", edgeCount, Statistics.Average(tps), Statistics.Median(tps), Statistics.StandardDeviation(tps)));
+        }
+
+        private long CountAllEdgesParallelPartitioner(System.Collections.ObjectModel.ReadOnlyCollection<VertexModel> vertices)
+        {
+            object lockObject = new object();
+            Int64 edgeCount = 0L;
+            var rangePartitioner = Partitioner.Create(0, vertices.Count);
+
+            Parallel.ForEach(
+                rangePartitioner,
+                () => 0L,
+                (range, loopstate, initialValue) =>
+                    {
+                        Int64 localCount = initialValue;
+
+                        for (int i = range.Item1; i < range.Item2; i++)
+                        {
+                            EdgePropertyModel epm;
+
+                            if (vertices[i].TryGetOutEdge(out epm, _edgePropertyId))
+                            {
+                                foreach (var aOutGoingEdge in epm)
+                                {
+                                    VertexModel vertex = aOutGoingEdge.TargetVertex;
+                                    localCount++;
+
+                                }
+                            }
+
+
+                        }
+
+                        return localCount;
+
+                    },
+                (localSum) =>
+                    {
+                        lock (lockObject)
+                        {
+                            edgeCount += localSum;
+                        }
+                    });
+
+            return edgeCount;
         }
     }
 }

@@ -278,7 +278,7 @@ namespace Intro
 
             for (int i = 0; i < w_ids.Length; i++)
             {
-                if (nodeIndex.GetValue(out vertices, w_ids[i]))
+                if (nodeIndex.TryGetValue(out vertices, w_ids[i]))
                 {
                     vertex = (VertexModel) vertices.First();
 
@@ -298,7 +298,7 @@ namespace Intro
 
             for (int i = 0; i < w_ids.Length; i++)
             {
-                if (nodeIndex.GetValue(out graphElement, w_ids[i]))
+                if (nodeIndex.TryGetValue(out graphElement, w_ids[i]))
                 {
                     vertex = (VertexModel)graphElement;
 
@@ -316,7 +316,7 @@ namespace Intro
             VertexModel vertex;
             Stopwatch sw = new Stopwatch();
 
-            if (nodeIndex.GetValue(out vertices, w_ids[0]))
+            if (nodeIndex.TryGetValue(out vertices, w_ids[0]))
             {
                 vertex = (VertexModel)vertices.First();
 

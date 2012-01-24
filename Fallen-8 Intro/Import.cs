@@ -113,12 +113,12 @@ namespace Intro
                 freq = reader.GetInt32(2);
                 sig = reader.GetDouble(3);
 
-                if (nodeIdx.GetValue(out sources, w1_id))
+                if (nodeIdx.TryGetValue(out sources, w1_id))
                 {
                     source = (VertexModel) sources.First();
                 }
 
-                if (nodeIdx.GetValue(out targets, w2_id))
+                if (nodeIdx.TryGetValue(out targets, w2_id))
                 {
                     target = (VertexModel) targets.First();
                 }
