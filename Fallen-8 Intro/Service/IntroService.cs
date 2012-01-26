@@ -72,12 +72,12 @@ namespace Intro.Service
 
         #region IWortschatz Members
 
-        public string ImportWortschatz(string database)
+        public string ImportWortschatz()
         {
             IIndex index;
             _fallen8.IndexFactory.TryCreateIndex(out index, _wordIndexName, "SingleValueIndex");
 
-            return Import.ImportFromMySql(_fallen8, (SingleValueIndex)index, database);
+            return Import.ImportFromMySql(_fallen8, (SingleValueIndex)index);
         }
 
         public List<double> ExecuteQuery(string queryIdentifier)

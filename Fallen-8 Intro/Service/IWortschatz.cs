@@ -14,11 +14,10 @@ namespace Intro.Service
         /// <summary>
         /// Imports a database
         /// </summary>
-        /// <param name="database">The name of the database</param>
         /// <returns>Some stats</returns>
         [OperationContract]
-        [WebGet(UriTemplate = "/Wortschatz/Import/{database}")]
-        String ImportWortschatz(String database);
+        [WebGet(UriTemplate = "/Wortschatz/Import")]
+        String ImportWortschatz();
 
         /// <summary>
         /// Execute queries on wortschatz

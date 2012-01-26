@@ -17,5 +17,8 @@
     <Setting Name="Password" Type="System.String" Scope="User">
       <Value Profile="(Default)">password</Value>
     </Setting>
+    <Setting Name="WortschatzDatabase" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Wortschatz</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

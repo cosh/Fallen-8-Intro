@@ -82,5 +82,17 @@ namespace Intro {
                 this["Password"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Wortschatz")]
+        public string WortschatzDatabase {
+            get {
+                return ((string)(this["WortschatzDatabase"]));
+            }
+            set {
+                this["WortschatzDatabase"] = value;
+            }
+        }
     }
 }

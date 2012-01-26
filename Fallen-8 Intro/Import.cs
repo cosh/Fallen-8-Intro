@@ -11,13 +11,13 @@ namespace Intro
 {
     public class Import
     {
-        public static String ImportFromMySql(Fallen8.API.Fallen8 myFallen8, SingleValueIndex nodeIndex, String database)
+        public static String ImportFromMySql(Fallen8.API.Fallen8 myFallen8, SingleValueIndex nodeIndex)
         {            
             #region Connect to MySql
 
             var connectionString = String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3}", 
                 Server.Default.WortSchatzDBHOST,
-                database,
+                Server.Default.WortschatzDatabase,
                 Server.Default.User, 
                 Server.Default.Password);
 
