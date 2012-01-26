@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Fallen8.API;
 using Fallen8.API.Index;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Fallen8.API.Model;
 
 namespace Intro
 {
     public class Benchmark
     {
-        public static int[] w_ids = new int[] { 
+        public static int[] w_ids = new[] { 
             12340,  5729,   9763,   5806,   3398,   6358,   22037,  18391,  11439,  5622,
             18413,  3969,   2571,   1524,   9746,   6696,   15562,  16258,  9809,   11561,
             8621,   3797,   17290,  14283,  22046,  13457,  15290,  4735,   7722,   2670,
@@ -35,9 +32,6 @@ namespace Intro
             Object sig;
             Object freq;
 
-            long sourceVertexID;
-            long targetVertexID;
-
             EdgePropertyModel edgeProperty1, edgeProperty2;
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
@@ -47,16 +41,8 @@ namespace Intro
                     {
                         foreach (var aEdge in edgeProperty2)
                         {
-                            sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
-                            targetVertexID = aEdge.TargetVertex.Id;
                             aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
                             aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
-
-                            //Console.WriteLine(String.Format("[{0},{1},{2},{3}]",
-                            //    sourceVertexID,
-                            //    targetVertexID,
-                            //    sig,
-                            //    freq));
                         }
                     }
                 }                
@@ -73,161 +59,6 @@ namespace Intro
             Object sig;
             Object freq;
 
-            long sourceVertexID;
-            long targetVertexID;
-
-            List<VertexModel> neighbors;
-
-            EdgePropertyModel edgeProperty1;
-
-            if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
-            {
-                neighbors = new List<VertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
-
-                Parallel.ForEach(neighbors, aNeighbor =>
-                    {
-                        foreach (var aTargetVertex2 in neighbors)
-                        {
-                            if (aNeighbor.Id == aTargetVertex2.Id)
-                            {
-                                continue;
-                            }
-                            else
-                            {
-                                EdgePropertyModel edgeProperty2;
-                                if (aNeighbor.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
-                                {
-                                    foreach (var aEdge in edgeProperty2)
-                                    {
-                                        if (aEdge.TargetVertex.Id == aTargetVertex2.Id)
-                                        {
-                                            sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
-                                            targetVertexID = aEdge.TargetVertex.Id;
-                                            aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
-                                            aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
-
-                                            //Console.WriteLine(String.Format("[{0},{1},{2},{3}]",
-                                            //    sourceVertexID,
-                                            //    targetVertexID,
-                                            //    sig,
-                                            //    freq));
-                                        }
-                                    }
-                                }
-
-                            }
-                        }
-                    });
-            }
-
-        }
-
-        /// <summary>
-        /// Finds all edges between the neighbours of the given start vertex.
-        /// </summary>
-        /// <param name="startVertex"></param>
-        /// <param name="myEdgePropertyID"></param>
-        private static void Query3_v2(VertexModel startVertex, Int32 myEdgePropertyID)
-        {
-            Object sig;
-            Object freq;
-
-            long sourceVertexID;
-            long targetVertexID;
-
-            HashSet<VertexModel> neighbors;
-
-            EdgePropertyModel edgeProperty1;
-
-            if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
-            {
-                neighbors = new HashSet<VertexModel>(edgeProperty1.Select(_ => _.TargetVertex));
-
-                Parallel.ForEach(neighbors, aNeighbor =>
-                {
-                    IEnumerable<EdgeModel> incomingEdges;
-                    if (aNeighbor.TryGetInEdges(out incomingEdges, myEdgePropertyID))
-                    {
-                        foreach (var aRelevantEdge in incomingEdges.Where(_ => neighbors.Contains(_.SourceEdgeProperty.SourceVertex)))
-                        {
-                            sourceVertexID = aRelevantEdge.SourceEdgeProperty.SourceVertex.Id;
-                            targetVertexID = aRelevantEdge.TargetVertex.Id;
-                            aRelevantEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
-                            aRelevantEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
-                        }
-                    }
-                });
-            }
-
-        }
-
-        /// <summary>
-        /// Finds all edges between the neighbours of the given start vertex.
-        /// </summary>
-        /// <param name="startVertex"></param>
-        /// <param name="myEdgePropertyID"></param>
-        private static void Query3_old(VertexModel startVertex, Int32 myEdgePropertyID)
-        {
-            Object sig;
-            Object freq;
-
-            long sourceVertexID;
-            long targetVertexID;
-
-            EdgePropertyModel edgeProperty1, edgeProperty2;
-
-            if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
-            {
-                foreach (var aTargetVertex1 in edgeProperty1.Select(_ => _.TargetVertex))
-                {
-                    foreach (var aTargetVertex2 in edgeProperty1.Select(_ => _.TargetVertex))
-                    {
-                        if (aTargetVertex1.Id == aTargetVertex2.Id)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            if (aTargetVertex1.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
-                            {
-                                foreach (var aEdge in edgeProperty2)
-                                {
-                                    if (aEdge.TargetVertex.Id == aTargetVertex2.Id)
-                                    {
-                                        sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
-                                        targetVertexID = aEdge.TargetVertex.Id;
-                                        aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
-                                        aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
-
-                                        //Console.WriteLine(String.Format("[{0},{1},{2},{3}]",
-                                        //    sourceVertexID,
-                                        //    targetVertexID,
-                                        //    sig,
-                                        //    freq));
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
-		
-        }
-
-        /// <summary>
-        /// Finds all edges between the neighbours of the given start vertex.
-        /// </summary>
-        /// <param name="startVertex"></param>
-        /// <param name="myEdgePropertyID"></param>
-        private static void Query3_1st(VertexModel startVertex, Int32 myEdgePropertyID)
-        {
-            Object sig;
-            Object freq;
-
-            long sourceVertexID;
-            long targetVertexID;
-
             EdgePropertyModel edgeProperty1, edgeProperty2;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
@@ -238,7 +69,6 @@ namespace Intro
                     {
                         if (ReferenceEquals(aOutEdge1.TargetVertex, aOutEdge2.TargetVertex))
                         {
-                            continue;
                         }
                         else
                         {
@@ -248,16 +78,10 @@ namespace Intro
                                 {
                                     if (ReferenceEquals(aEdge.TargetVertex, aOutEdge2.TargetVertex))
                                     {
-                                        sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
-                                        targetVertexID = aEdge.TargetVertex.Id;
+                                        var sourceVertexID = aEdge.SourceEdgeProperty.SourceVertex.Id;
+                                        var targetVertexID = aEdge.TargetVertex.Id;
                                         aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
                                         aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
-
-                                        //Console.WriteLine(String.Format("[{0},{1},{2},{3}]",
-                                        //    sourceVertexID,
-                                        //    targetVertexID,
-                                        //    sig,
-                                        //    freq));
                                     }
                                 }
                             }
@@ -269,62 +93,54 @@ namespace Intro
 
         }
 
-
-        public static void RunQuery2(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
+        public static List<double> RunQuery2(Fallen8.API.Fallen8 myFallen8, String wordIndexName)
         {
+            var nodeIndex = (SingleValueIndex)myFallen8.IndexFactory.Indices[wordIndexName];
+            var totalMilliseconds = new List<double>();
+
             IEnumerable<AGraphElement> vertices;
             VertexModel vertex;
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
 
-            for (int i = 0; i < w_ids.Length; i++)
+            foreach (var t in w_ids)
             {
-                if (nodeIndex.TryGetValue(out vertices, w_ids[i]))
+                if (nodeIndex.TryGetValue(out vertices, t))
                 {
                     vertex = (VertexModel) vertices.First();
 
                     sw.Start();
                     Query2(vertex, Config.CO_S_EDGE_PROPERTY_ID);
-                    Console.WriteLine(Math.Round(sw.Elapsed.TotalMilliseconds));
+                    totalMilliseconds.Add(Math.Round(sw.Elapsed.TotalMilliseconds));
                     sw.Reset();
                 }
             }
+
+            return totalMilliseconds;
         }
 
-        public static void RunQuery3(Fallen8.API.Fallen8 myFallen8, SingleValueIndex nodeIndex)
+        public static List<double> RunQuery3(Fallen8.API.Fallen8 myFallen8, String nodeIndexName)
         {
+            var nodeIndex = (SingleValueIndex)myFallen8.IndexFactory.Indices[nodeIndexName];
+            var totalMilliseconds = new List<double>();
+
             AGraphElement graphElement;
             VertexModel vertex;
-            Stopwatch sw = new Stopwatch();
+            var sw = new Stopwatch();
 
-            for (int i = 0; i < w_ids.Length; i++)
+            foreach (var t in w_ids)
             {
-                if (nodeIndex.TryGetValue(out graphElement, w_ids[i]))
+                if (nodeIndex.TryGetValue(out graphElement, t))
                 {
                     vertex = (VertexModel)graphElement;
 
                     sw.Start();
-                    Query3_1st(vertex, Config.CO_S_EDGE_PROPERTY_ID);
-                    Console.WriteLine(Math.Round(sw.Elapsed.TotalMilliseconds));
+                    Query3(vertex, Config.CO_S_EDGE_PROPERTY_ID);
+                    totalMilliseconds.Add(Math.Round(sw.Elapsed.TotalMilliseconds));
                     sw.Reset();
                 }
             }
-        }
 
-        public static void RunQuery32(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
-        {
-            IEnumerable<AGraphElement> vertices;
-            VertexModel vertex;
-            Stopwatch sw = new Stopwatch();
-
-            if (nodeIndex.TryGetValue(out vertices, w_ids[0]))
-            {
-                vertex = (VertexModel)vertices.First();
-
-                sw.Start();
-                Query3_1st(vertex, Config.CO_S_EDGE_PROPERTY_ID);
-                Console.WriteLine(Math.Round(sw.Elapsed.TotalMilliseconds));
-                sw.Reset();
-            }
+            return totalMilliseconds;
         }
     }
 }

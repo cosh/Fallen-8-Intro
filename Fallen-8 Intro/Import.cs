@@ -1,45 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using MySql.Data.MySqlClient;
 using Fallen8.API.Index;
 using Fallen8.API.Helper;
 using System.Diagnostics;
 using Fallen8.API.Model;
+using System.Text;
 
 namespace Intro
 {
     public class Import
     {
-        public static void ImportFromMySql(Fallen8.API.Fallen8 myFallen8, IIndex nodeIndex)
+        public static String ImportFromMySql(Fallen8.API.Fallen8 myFallen8, SingleValueIndex nodeIndex, String database)
         {            
             #region Connect to MySql
 
             var connectionString = String.Format("SERVER={0};DATABASE={1};UID={2};PASSWORD={3}", 
-                Config.HOST, 
-                Config.DATABASE, 
-                Config.USER, 
-                Config.PASSWORD);
+                Server.Default.WortSchatzDBHOST,
+                database,
+                Server.Default.User, 
+                Server.Default.Password);
 
             var connection = new MySqlConnection(connectionString);
             connection.Open();
-
-            
 
             #endregion
 
             #region Import
 
+            var sb = new StringBuilder();
+
             // import words
-            Stopwatch sw = Stopwatch.StartNew();
-            ReadWords(myFallen8, connection, nodeIndex, Config.TABLE_WORDS);
-            Console.WriteLine("took {0} ms", sw.Elapsed.TotalMilliseconds);
+            var sw = Stopwatch.StartNew();
+            sb.AppendLine(ReadWords(myFallen8, connection, nodeIndex, Config.TABLE_WORDS));
+            sb.AppendLine(String.Format("took {0} ms", sw.Elapsed.TotalMilliseconds));
             sw.Restart();
-            ReadCooccurrences(myFallen8, connection, nodeIndex, Config.TABLE_CO_N, Config.CO_N_EDGE_PROPERTY_ID);
-            Console.WriteLine("took {0} ms", sw.Elapsed.TotalMilliseconds);
+            sb.AppendLine(ReadCooccurrences(myFallen8, connection, nodeIndex, Config.TABLE_CO_N, Config.CO_N_EDGE_PROPERTY_ID));
+            sb.AppendLine(String.Format("took {0} ms", sw.Elapsed.TotalMilliseconds));
             sw.Restart();
-            ReadCooccurrences(myFallen8, connection, nodeIndex, Config.TABLE_CO_S, Config.CO_S_EDGE_PROPERTY_ID);
-            Console.WriteLine("took {0} ms", sw.Elapsed.TotalMilliseconds);
+            sb.AppendLine(ReadCooccurrences(myFallen8, connection, nodeIndex, Config.TABLE_CO_S, Config.CO_S_EDGE_PROPERTY_ID));
+            sb.AppendLine(String.Format("took {0} ms", sw.Elapsed.TotalMilliseconds));
             sw.Stop();
 
             #endregion
@@ -49,20 +49,28 @@ namespace Intro
             connection.Close();
 
             #endregion
+
+            GC.Collect();
+            GC.Collect();
+            GC.WaitForFullGCApproach();
+
+            return sb.ToString();
         }
 
-        private static void ReadWords(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, IIndex nodeIndex, String tableName)
+        private static string ReadWords(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, IIndex nodeIndex, String tableName)
         {            
             // query
             var query = mySql.CreateCommand();
             query.CommandText = "SELECT w_id, word FROM " + tableName;
 
+            var sb = new StringBuilder();
+
             String word;
             Int32 w_id;
-            DateTime creationDate = DateTime.Now;
+            var creationDate = DateTime.Now;
             VertexModel vertex;
 
-            Console.WriteLine("importing {0} words from {1}", GetMySqlRowCount(mySql, tableName), tableName);
+            sb.AppendLine(String.Format("importing {0} words from {1}", GetMySqlRowCount(mySql, tableName), tableName));
 
             var reader = query.ExecuteReader();
 
@@ -81,28 +89,31 @@ namespace Intro
             }
 
             reader.Close();
-            Console.WriteLine("done");
+
+            return sb.ToString();
         }
 
-        private static void ReadCooccurrences(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, IIndex nodeIdx, String tableName, Int32 edgePropertyID)
+        private static string ReadCooccurrences(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, SingleValueIndex nodeIdx, String tableName, Int32 edgePropertyID)
         {
             // query
             var query = mySql.CreateCommand();
             query.CommandText = "SELECT w1_id, w2_id, freq, sig FROM " + tableName;
 
-            DateTime creationDate = DateTime.Now;
+            var sb = new StringBuilder();
+
+            var creationDate = DateTime.Now;
             Int32 w1_id;
             Int32 w2_id;
             Int32 freq;
             Double sig;
 
-            IEnumerable<AGraphElement> sources;
-            IEnumerable<AGraphElement> targets;
+            AGraphElement sources;
+            AGraphElement targets;
 
             VertexModel source = null;
             VertexModel target = null;
 
-            Console.WriteLine("importing {0} co-occurrences from {1}", GetMySqlRowCount(mySql, tableName), tableName);
+            sb.AppendLine(String.Format("importing {0} co-occurrences from {1}", GetMySqlRowCount(mySql, tableName), tableName));
 
             var reader = query.ExecuteReader();
         
@@ -115,12 +126,12 @@ namespace Intro
 
                 if (nodeIdx.TryGetValue(out sources, w1_id))
                 {
-                    source = (VertexModel) sources.First();
+                    source = (VertexModel) sources;
                 }
 
                 if (nodeIdx.TryGetValue(out targets, w2_id))
                 {
-                    target = (VertexModel) targets.First();
+                    target = (VertexModel) targets;
                 }
 
                 // create edge
@@ -132,12 +143,13 @@ namespace Intro
                     }));              
             }
             reader.Close();
-            Console.WriteLine("done");
+
+            return sb.ToString();
         }
 
         private static int GetMySqlRowCount(MySqlConnection mySql, String tableName = "")
         {            
-            int count = 0;
+            var count = 0;
 
             var query = mySql.CreateCommand();
             query.CommandText = "SELECT COUNT(*) FROM " + tableName;

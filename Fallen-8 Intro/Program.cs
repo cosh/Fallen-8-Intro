@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Diagnostics;
-using Fallen8.API.Index;
+using System.Net;
+using Fallen8.API;
+using Fallen8.API.Service;
 
 namespace Intro
 {
@@ -11,40 +10,55 @@ namespace Intro
     {
         static void Main(string[] args)
         {
-            var fallen8 = new Fallen8.API.Fallen8();
+            var shutdown = false;
 
-            //IIndex index;
-            //if (fallen8.IndexFactory.TryCreateIndex(out index, "word_idx", "SingleValueIndex"))
-            //{
-            //    Console.WriteLine("created index word_idx");
-            //}
+            #region Fallen-8 startup
 
-            //Import.ImportFromMySql(fallen8, index);
-            //Console.WriteLine("done");
+            var server = new Fallen8Server();
 
-            //Console.ReadLine();         
-            ////Benchmark.RunQuery2(fallen8, index);
-            //Benchmark.RunQuery3(fallen8, (SingleValueIndex)index);
+            #endregion
 
-            var introProvicer = new IntroProvider(fallen8);
-            int nodeCount = 100000;
-            int edgeCount = 60;
+            #region services
 
-            Stopwatch sw = Stopwatch.StartNew();
+            #region api
 
-            introProvicer.CreateScaleFreeNetwork(nodeCount, edgeCount);
-            sw.Stop();
-            Console.WriteLine(String.Format("It took {0}ms to create a Fallen-8 graph with {1} nodes and {2} edges per node.", sw.Elapsed.TotalMilliseconds, nodeCount, edgeCount));
+            var restServiceProperties = new Dictionary<string, object>
+                                     {
+                                         {"IPAddress", IPAddress.Parse(Server.Default.IPAdress)},
+                                         {"Port", Server.Default.Port}
+                                     };
+            IFallen8Service service;
+            server.TryStartService(out service, "IntroRESTService", restServiceProperties);
 
-            GC.Collect();
-            GC.Collect();
-            GC.WaitForFullGCApproach();
+            #endregion
 
-            introProvicer.Bench();
+            Console.WriteLine("Started services:");
+            foreach (var aService in server.Services)
+            {
+                Console.WriteLine(aService.Description);
+            }
 
-            Console.WriteLine("done");
+            #endregion
 
-            Console.ReadLine();         
+            #region shutdown
+
+            Console.WriteLine("Enter 'shutdown' to initiate the shutdown of this instance.");
+
+            while (!shutdown)
+            {
+                var command = Console.ReadLine();
+
+                if (command == null) continue;
+
+                if (command.ToUpper() == "SHUTDOWN")
+                    shutdown = true;
+            }
+
+            Console.WriteLine("Shutting down Fallen-8 intro");
+            server.Shutdown();
+            Console.WriteLine("Shutdown complete");
+
+            #endregion
         }
     }
 }

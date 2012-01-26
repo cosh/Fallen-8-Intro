@@ -2,43 +2,32 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Text;
-using Fallen8.API;
 using System.Threading.Tasks;
 using Fallen8.API.Helper;
 using Fallen8.API.Model;
-using System.Threading;
+using System.Collections.ObjectModel;
 
 namespace Intro
 {
-    class IntroProvider
+    public static class IntroProvider
     {
-        private Fallen8.API.Fallen8 _fallen8;
-        private Int32 _edgePropertyId;
-
-        public IntroProvider(Fallen8.API.Fallen8 fallen8)
+        public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8.API.Fallen8 fallen8)
         {
-            _fallen8 = fallen8;
-            _edgePropertyId = 0;
-        }
+            var creationDate = DateTime.Now;
+            var vertexIDs = new List<Int32>();
+            var prng = new Random();
 
-        internal void CreateScaleFreeNetwork(int nodeCound, int edgeCount)
-        {
-            DateTime creationDate = DateTime.Now;
-            List<Int32> vertexIDs = new List<Int32>();
-            Random prng = new Random();
-
-            for (int i = 0; i < nodeCound; i++)
+            for (var i = 0; i < nodeCound; i++)
             {
                 vertexIDs.Add(
-                    _fallen8.CreateVertex(creationDate, new Dictionary<int, object> {{23, 4344}, {33, "asdasd"}}).Id);
+                    fallen8.CreateVertex(creationDate, new Dictionary<int, object> { { 23, 4344 } }).Id);
                         
             }
 
             foreach (var aVertexId in vertexIDs)
             {
-                HashSet<Int32> targetVertices = new HashSet<Int32>();
+                var targetVertices = new HashSet<Int32>();
 
                 do
                 {
@@ -47,62 +36,21 @@ namespace Intro
 
                 foreach (var aTargetVertex in targetVertices)
                 {
-                    _fallen8.CreateEdge(aVertexId, _edgePropertyId, new EdgeModelDefinition(aTargetVertex, creationDate, null));
+                    fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate));
                 }
             }
         }
 
-        internal void TraverseABit()
+        public static String Bench(Fallen8.API.Fallen8 fallen8, int myIterations = 1000)
         {
-            var vertex = _fallen8.GetVertices().First();
-
-
-            #region out edges
-
-            EdgePropertyModel edgeProperty;
-            if (vertex.TryGetOutEdge(out edgeProperty, _edgePropertyId))
-            {
-                foreach (var aTargetVertex in edgeProperty.Select(_ => _.TargetVertex))
-                {
-                    // target vertices
-                }
-
-                foreach (var aEdge in edgeProperty)
-                {
-                    // edge
-                }
-            } 
-            
-            #endregion
-
-            #region inc edges
-
-            IEnumerable<EdgeModel> incomingEdges;
-            if (vertex.TryGetInEdges(out incomingEdges, _edgePropertyId))
-            {
-                foreach (var aIncomingVertex in incomingEdges.Select(_ => _.SourceEdgeProperty.SourceVertex))
-                {
-                    // incoming vertices
-                }
-
-                foreach (var aIncomingVertex in incomingEdges.Select(_ => _.SourceEdgeProperty).SelectMany(__ => __))
-                {
-                    // outgoing vertices of the incoming vertices
-                }
-            }
-            
-            #endregion
-        }
-
-        internal void Bench(int myIterations = 1000)
-        {
-            var vertices = _fallen8.GetVertices();
+            var vertices = fallen8.GetVertices();
             var tps = new List<double>();
             long edgeCount = 0;
+            var sb = new StringBuilder();
 
-            for (int i = 0; i < myIterations; i++)
+            for (var i = 0; i < myIterations; i++)
             {
-                Stopwatch sw = Stopwatch.StartNew();
+                var sw = Stopwatch.StartNew();
 
                 edgeCount = CountAllEdgesParallelPartitioner(vertices);
 
@@ -111,15 +59,15 @@ namespace Intro
                 tps.Add(edgeCount / sw.Elapsed.TotalSeconds);
             }
 
-            Console.WriteLine(String.Format("Traversed {0} edges.", edgeCount));
+            sb.AppendLine(String.Format("Traversed {0} edges. Average: {1}TPS Median: {2}TPS StandardDeviation {3}TPS ", edgeCount, Statistics.Average(tps), Statistics.Median(tps), Statistics.StandardDeviation(tps)));
 
-            Console.WriteLine(String.Format("Traversed {0} edges. Average: {1}TPS Median: {2}TPS StandardDeviation {3}TPS ", edgeCount, Statistics.Average(tps), Statistics.Median(tps), Statistics.StandardDeviation(tps)));
+            return sb.ToString();
         }
 
-        private long CountAllEdgesParallelPartitioner(System.Collections.ObjectModel.ReadOnlyCollection<VertexModel> vertices)
+        private static long CountAllEdgesParallelPartitioner(ReadOnlyCollection<VertexModel> vertices)
         {
-            object lockObject = new object();
-            Int64 edgeCount = 0L;
+            var lockObject = new object();
+            var edgeCount = 0L;
             var rangePartitioner = Partitioner.Create(0, vertices.Count);
 
             Parallel.ForEach(
@@ -127,17 +75,17 @@ namespace Intro
                 () => 0L,
                 (range, loopstate, initialValue) =>
                     {
-                        Int64 localCount = initialValue;
+                        var localCount = initialValue;
 
-                        for (int i = range.Item1; i < range.Item2; i++)
+                        for (var i = range.Item1; i < range.Item2; i++)
                         {
                             EdgePropertyModel epm;
 
-                            if (vertices[i].TryGetOutEdge(out epm, _edgePropertyId))
+                            if (vertices[i].TryGetOutEdge(out epm, 0))
                             {
                                 foreach (var aOutGoingEdge in epm)
                                 {
-                                    VertexModel vertex = aOutGoingEdge.TargetVertex;
+                                    var vertex = aOutGoingEdge.TargetVertex;
                                     localCount++;
 
                                 }
@@ -149,7 +97,7 @@ namespace Intro
                         return localCount;
 
                     },
-                (localSum) =>
+                delegate(long localSum)
                     {
                         lock (lockObject)
                         {

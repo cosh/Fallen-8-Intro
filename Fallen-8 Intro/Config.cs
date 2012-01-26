@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Intro
 {
     public class Config
     {
-        public const String HOST = "localhost";
-        public const String USER = "root";
-        public const String PASSWORD = "password";
-
-        public const String DATABASE = "wortschatz";
         public const String TABLE_WORDS = "words";
         public const String TABLE_CO_N = "co_n";
         public const String TABLE_CO_S = "co_s";
