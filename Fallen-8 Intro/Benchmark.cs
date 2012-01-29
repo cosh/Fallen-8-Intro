@@ -4,6 +4,7 @@ using System.Linq;
 using Fallen8.API.Index;
 using System.Diagnostics;
 using Fallen8.API.Model;
+using System.Collections.ObjectModel;
 
 namespace Intro
 {
@@ -98,15 +99,14 @@ namespace Intro
             var nodeIndex = (SingleValueIndex)myFallen8.IndexFactory.Indices[wordIndexName];
             var totalMilliseconds = new List<double>();
 
-            IEnumerable<AGraphElement> vertices;
-            VertexModel vertex;
+            ReadOnlyCollection<AGraphElement> vertices;
             var sw = new Stopwatch();
 
             foreach (var t in w_ids)
             {
                 if (nodeIndex.TryGetValue(out vertices, t))
                 {
-                    vertex = (VertexModel) vertices.First();
+                    var vertex = (VertexModel) vertices.First();
 
                     sw.Start();
                     Query2(vertex, Config.CO_S_EDGE_PROPERTY_ID);
