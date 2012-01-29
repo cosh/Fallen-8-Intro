@@ -36,11 +36,11 @@ namespace Intro
             EdgePropertyModel edgeProperty1, edgeProperty2;
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
-                foreach (var aTargetVertex in edgeProperty1.Select(_ => _.TargetVertex))
+                foreach (var aTargetVertex in edgeProperty1.GetEdges().Select(_ => _.TargetVertex))
                 {
                     if (aTargetVertex.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
                     {
-                        foreach (var aEdge in edgeProperty2)
+                        foreach (var aEdge in edgeProperty2.GetEdges())
                         {
                             aEdge.TryGetProperty(out sig, Config.SIG_PROPERTY_ID);
                             aEdge.TryGetProperty(out freq, Config.FREQ_PROPERTY_ID);
@@ -64,9 +64,9 @@ namespace Intro
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
-                foreach (var aOutEdge1 in edgeProperty1)
+                foreach (var aOutEdge1 in edgeProperty1.GetEdges())
                 {
-                    foreach (var aOutEdge2 in edgeProperty1)
+                    foreach (var aOutEdge2 in edgeProperty1.GetEdges())
                     {
                         if (ReferenceEquals(aOutEdge1.TargetVertex, aOutEdge2.TargetVertex))
                         {
@@ -75,7 +75,7 @@ namespace Intro
                         {
                             if (aOutEdge1.TargetVertex.TryGetOutEdge(out edgeProperty2, myEdgePropertyID))
                             {
-                                foreach (var aEdge in edgeProperty2)
+                                foreach (var aEdge in edgeProperty2.GetEdges())
                                 {
                                     if (ReferenceEquals(aEdge.TargetVertex, aOutEdge2.TargetVertex))
                                     {

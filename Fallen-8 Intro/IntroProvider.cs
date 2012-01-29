@@ -83,7 +83,7 @@ namespace Intro
 
                             if (vertices[i].TryGetOutEdge(out epm, 0))
                             {
-                                foreach (var aOutGoingEdge in epm)
+                                foreach (var aOutGoingEdge in epm.GetEdges())
                                 {
                                     var vertex = aOutGoingEdge.TargetVertex;
                                     localCount++;
