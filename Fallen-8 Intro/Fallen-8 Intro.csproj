@@ -14,6 +14,7 @@
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +27,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -83,6 +83,10 @@
     <Compile Include="Service\IWortschatz.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Dependencies\Fallen-8\Dependencies\FastSerializer\FastSerializer.csproj">
+      <Project>{7267AFEB-D3FC-4416-8792-C386A685C86F}</Project>
+      <Name>FastSerializer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Dependencies\Fallen-8\Fallen-8\Fallen-8.csproj">
       <Project>{40759EF1-EBF9-41A3-BFEB-1314ABE36489}</Project>
       <Name>Fallen-8 %28Dependencies\Fallen-8\Fallen-8%29</Name>

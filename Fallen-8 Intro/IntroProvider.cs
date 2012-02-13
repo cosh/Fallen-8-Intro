@@ -14,14 +14,20 @@ namespace Intro
     {
         public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8.API.Fallen8 fallen8)
         {
-            var creationDate = DateTime.Now;
+            var creationDate = DateTime.Now.ToBinary();
             var vertexIDs = new List<Int32>();
             var prng = new Random();
 
             for (var i = 0; i < nodeCound; i++)
             {
                 vertexIDs.Add(
-                    fallen8.CreateVertex(creationDate, new Dictionary<int, object> { { 23, 4344 } }).Id);
+                    fallen8.CreateVertex(creationDate, new List<PropertyContainer>
+                                                           {
+                                                               new PropertyContainer { PropertyId = 23, Value = 4344 },
+                                                               new PropertyContainer { PropertyId = 24, Value = "Ein gaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaanz langes Property" },
+                                                               new PropertyContainer { PropertyId = 25, Value = "Ein kurzes Property" },
+                                                               new PropertyContainer { PropertyId = 26, Value = "Ein gaaaaaaaanz langes Property" },
+                                                           }).Id);
                         
             }
 
@@ -36,7 +42,11 @@ namespace Intro
 
                 foreach (var aTargetVertex in targetVertices)
                 {
-                    fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate));
+                    fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate, new List<PropertyContainer>
+                                                           {
+                                                               new PropertyContainer { PropertyId = 29, Value = 23.4 },
+                                                               new PropertyContainer { PropertyId = 1, Value = 2 },
+                                                           }));
                 }
             }
         }
@@ -79,11 +89,11 @@ namespace Intro
 
                         for (var i = range.Item1; i < range.Item2; i++)
                         {
-                            EdgePropertyModel epm;
+                            List<EdgeModel> epm;
 
                             if (vertices[i].TryGetOutEdge(out epm, 0))
                             {
-                                foreach (var aOutGoingEdge in epm.GetEdges())
+                                foreach (var aOutGoingEdge in epm)
                                 {
                                     var vertex = aOutGoingEdge.TargetVertex;
                                     localCount++;

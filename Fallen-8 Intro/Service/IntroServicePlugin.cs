@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Xml;
 using Fallen8.API.Service;
+using Framework.Serialization;
 
 namespace Intro.Service
 {
@@ -83,6 +84,16 @@ namespace Intro.Service
         #endregion
 
         #region IFallen8Plugin Members
+
+        public void Save(SerializationWriter writer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Open(SerializationReader reader, Fallen8.API.Fallen8 fallen8)
+        {
+            throw new NotImplementedException();
+        }
 
         public string PluginName
         {

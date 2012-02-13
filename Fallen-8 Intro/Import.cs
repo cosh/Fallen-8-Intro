@@ -67,7 +67,7 @@ namespace Intro
 
             String word;
             Int32 w_id;
-            var creationDate = DateTime.Now;
+            var creationDate = DateTime.Now.ToBinary();
             VertexModel vertex;
 
             sb.AppendLine(String.Format("importing {0} words from {1}", GetMySqlRowCount(mySql, tableName), tableName));
@@ -79,10 +79,10 @@ namespace Intro
                 w_id = reader.GetInt32(0);
                 word = reader.GetString(1);
 
-                vertex = myFallen8.CreateVertex(creationDate, new Dictionary<int,object> 
+                vertex = myFallen8.CreateVertex(creationDate, new List<PropertyContainer> 
                 { 
-                    {Config.W_ID_PROPERTY_ID, w_id},
-                    {Config.WORD_PROPERTY_ID, word}
+                    new PropertyContainer { PropertyId = Config.W_ID_PROPERTY_ID, Value = w_id},
+                    new PropertyContainer { PropertyId = Config.WORD_PROPERTY_ID, Value = word}
                 });
 
                 nodeIndex.AddOrUpdate(w_id, vertex);
@@ -101,7 +101,7 @@ namespace Intro
 
             var sb = new StringBuilder();
 
-            var creationDate = DateTime.Now;
+            var creationDate = DateTime.Now.ToBinary();
             Int32 w1_id;
             Int32 w2_id;
             Int32 freq;
@@ -136,10 +136,10 @@ namespace Intro
 
                 // create edge
 
-                myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate, new Dictionary<int, object>
-                    {
-                        {Config.FREQ_PROPERTY_ID, freq},
-                        {Config.SIG_PROPERTY_ID, sig},
+                myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate, new List<PropertyContainer> 
+                { 
+                    new PropertyContainer { PropertyId = Config.FREQ_PROPERTY_ID, Value = freq},
+                    new PropertyContainer { PropertyId = Config.SIG_PROPERTY_ID, Value = sig},
                     }));              
             }
             reader.Close();
