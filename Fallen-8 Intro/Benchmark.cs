@@ -33,7 +33,7 @@ namespace Intro
             Object sig;
             Object freq;
 
-            List<EdgeModel> edgeProperty1, edgeProperty2;
+            ReadOnlyCollection<EdgeModel> edgeProperty1, edgeProperty2;
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {
                 foreach (var aTargetVertex in edgeProperty1.Select(_ => _.TargetVertex))
@@ -60,7 +60,7 @@ namespace Intro
             Object sig;
             Object freq;
 
-            List<EdgeModel> edgeProperty1, edgeProperty2;
+            ReadOnlyCollection<EdgeModel> edgeProperty1, edgeProperty2;
 
             if (startVertex.TryGetOutEdge(out edgeProperty1, myEdgePropertyID))
             {

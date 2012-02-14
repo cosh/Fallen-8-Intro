@@ -92,7 +92,7 @@ namespace Intro
 
                         for (var i = range.Item1; i < range.Item2; i++)
                         {
-                            List<EdgeModel> epm;
+                            ReadOnlyCollection<EdgeModel> epm;
 
                             if (vertices[i].TryGetOutEdge(out epm, 0))
                             {

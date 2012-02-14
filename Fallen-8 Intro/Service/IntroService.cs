@@ -47,6 +47,8 @@ namespace Intro.Service
         {
             var sb = new StringBuilder();
 
+            _fallen8.Trim();
+
             var currentProcess = Process.GetCurrentProcess();
             var totalBytesOfMemoryUsed = currentProcess.WorkingSet64 / 1024 / 1024;
 
