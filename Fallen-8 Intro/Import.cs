@@ -67,7 +67,7 @@ namespace Intro
 
             String word;
             Int32 w_id;
-            var creationDate = DateTime.Now.ToBinary();
+            var creationDate = DateTime.Now;
             VertexModel vertex;
 
             sb.AppendLine(String.Format("importing {0} words from {1}", GetMySqlRowCount(mySql, tableName), tableName));
@@ -79,7 +79,7 @@ namespace Intro
                 w_id = reader.GetInt32(0);
                 word = reader.GetString(1);
 
-                vertex = myFallen8.CreateVertex(creationDate, new List<PropertyContainer> 
+                vertex = myFallen8.CreateVertex(creationDate, new PropertyContainer[2] 
                 { 
                     new PropertyContainer { PropertyId = Config.W_ID_PROPERTY_ID, Value = w_id},
                     new PropertyContainer { PropertyId = Config.WORD_PROPERTY_ID, Value = word}
@@ -93,7 +93,7 @@ namespace Intro
             return sb.ToString();
         }
 
-        private static string ReadCooccurrences(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, SingleValueIndex nodeIdx, String tableName, Int32 edgePropertyID)
+        private static string ReadCooccurrences(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, SingleValueIndex nodeIdx, String tableName, UInt16 edgePropertyID)
         {
             // query
             var query = mySql.CreateCommand();
@@ -101,7 +101,7 @@ namespace Intro
 
             var sb = new StringBuilder();
 
-            var creationDate = DateTime.Now.ToBinary();
+            var creationDate = DateTime.Now;
             Int32 w1_id;
             Int32 w2_id;
             Int32 freq;
@@ -136,7 +136,7 @@ namespace Intro
 
                 // create edge
 
-                myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate, new List<PropertyContainer> 
+                myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate, new PropertyContainer[2]
                 { 
                     new PropertyContainer { PropertyId = Config.FREQ_PROPERTY_ID, Value = freq},
                     new PropertyContainer { PropertyId = Config.SIG_PROPERTY_ID, Value = sig},

@@ -14,7 +14,7 @@ namespace Intro
     {
         public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8.API.Fallen8 fallen8)
         {
-            var creationDate = DateTime.Now.ToBinary();
+            var creationDate = DateTime.Now;
             var vertexIDs = new List<Int32>();
             var prng = new Random();
 
