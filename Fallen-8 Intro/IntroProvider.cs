@@ -20,15 +20,15 @@ namespace Intro
 
             for (var i = 0; i < nodeCound; i++)
             {
-                //vertexIDs.Add(
-                //    fallen8.CreateVertex(creationDate, new List<PropertyContainer>
-                //                                           {
-                //                                               new PropertyContainer { PropertyId = 23, Value = 4344 },
-                //                                               new PropertyContainer { PropertyId = 24, Value = "Ein gaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaanz langes Property" },
-                //                                               new PropertyContainer { PropertyId = 25, Value = "Ein kurzes Property" },
-                //                                               new PropertyContainer { PropertyId = 26, Value = "Ein gaaaaaaaanz langes Property" },
-                //                                           }).Id);
-                vertexIDs.Add(fallen8.CreateVertex(creationDate).Id);
+                vertexIDs.Add(
+                    fallen8.CreateVertex(creationDate, new PropertyContainer[4]
+                                                           {
+                                                               new PropertyContainer { PropertyId = 23, Value = 4344 },
+                                                               new PropertyContainer { PropertyId = 24, Value = "Ein gaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaanz langes Property" },
+                                                               new PropertyContainer { PropertyId = 25, Value = "Ein kurzes Property" },
+                                                               new PropertyContainer { PropertyId = 26, Value = "Ein gaaaaaaaanz langes Property" },
+                                                           }).Id);
+                //vertexIDs.Add(fallen8.CreateVertex(creationDate).Id);
                         
             }
 
@@ -43,13 +43,13 @@ namespace Intro
 
                 foreach (var aTargetVertex in targetVertices)
                 {
-                    //fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate, new List<PropertyContainer>
-                    //                                       {
-                    //                                           new PropertyContainer { PropertyId = 29, Value = 23.4 },
-                    //                                           new PropertyContainer { PropertyId = 1, Value = 2 },
-                    //                                       }));
+                    fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate, new PropertyContainer[2]
+                                                           {
+                                                               new PropertyContainer { PropertyId = 29, Value = 23.4 },
+                                                               new PropertyContainer { PropertyId = 1, Value = 2 },
+                                                           }));
 
-                    fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate));
+                    //fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate));
                 }
             }
         }
