@@ -12,6 +12,19 @@ namespace Intro
 {
     public static class IntroProvider
     {
+        public static void ProfilerTest(Fallen8.API.Fallen8 fallen8)
+        {
+            var creationDate = DateTime.Now;
+
+            var a = fallen8.CreateVertex(creationDate);
+            var b = fallen8.CreateVertex(creationDate);
+
+            for (int i = 0; i < 1000; i++)
+            {
+                fallen8.CreateEdge(a.Id, 0, b.Id, creationDate);
+            }
+        }
+
         public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8.API.Fallen8 fallen8)
         {
             var creationDate = DateTime.Now;
@@ -49,7 +62,7 @@ namespace Intro
                                                                new PropertyContainer { PropertyId = 1, Value = 2 },
                                                            });
 
-                    fallen8.CreateEdge(aVertexId, 0, aTargetVertex, creationDate);
+                   // fallen8.CreateEdge(aVertexId, 0, aTargetVertex, creationDate);
                 }
             }
         }
