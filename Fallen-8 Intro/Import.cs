@@ -136,11 +136,11 @@ namespace Intro
 
                 // create edge
 
-                myFallen8.CreateEdge(source.Id, edgePropertyID, new EdgeModelDefinition(target.Id, creationDate, new PropertyContainer[2]
+                myFallen8.CreateEdge(source.Id, edgePropertyID, target.Id, creationDate, new PropertyContainer[2]
                 { 
                     new PropertyContainer { PropertyId = Config.FREQ_PROPERTY_ID, Value = freq},
                     new PropertyContainer { PropertyId = Config.SIG_PROPERTY_ID, Value = sig},
-                    }));              
+                    });              
             }
             reader.Close();
 

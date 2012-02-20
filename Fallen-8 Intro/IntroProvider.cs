@@ -43,13 +43,13 @@ namespace Intro
 
                 foreach (var aTargetVertex in targetVertices)
                 {
-                    fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate, new PropertyContainer[2]
+                    fallen8.CreateEdge(aVertexId, 0, aTargetVertex, creationDate, new PropertyContainer[2]
                                                            {
                                                                new PropertyContainer { PropertyId = 29, Value = 23.4 },
                                                                new PropertyContainer { PropertyId = 1, Value = 2 },
-                                                           }));
+                                                           });
 
-                    //fallen8.CreateEdge(aVertexId, 0, new EdgeModelDefinition(aTargetVertex, creationDate));
+                    fallen8.CreateEdge(aVertexId, 0, aTargetVertex, creationDate);
                 }
             }
         }
