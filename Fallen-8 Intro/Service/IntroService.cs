@@ -115,9 +115,13 @@ namespace Intro.Service
 
             sw.Stop();
 
-            GC.Collect();
+            #if __MonoCS__
+ 			//mono specific code
+			#else 
+ 			GC.Collect();
             GC.Collect();
             GC.WaitForFullGCApproach();
+			#endif
 
             return String.Format("It took {0}ms to create a Fallen-8 graph with {1} nodes and {2} edges per node.", sw.Elapsed.TotalMilliseconds, nodeCount, edgeCount);
         }

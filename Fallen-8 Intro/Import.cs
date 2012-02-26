@@ -50,10 +50,14 @@ namespace Intro
 
             #endregion
 
-            GC.Collect();
+			#if __MonoCS__
+ 			//mono specific code
+			#else 
+ 			GC.Collect();
             GC.Collect();
             GC.WaitForFullGCApproach();
-
+			#endif
+			
             return sb.ToString();
         }
 
