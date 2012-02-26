@@ -19,19 +19,30 @@ namespace Intro
             #endregion
 
             #region services
+			
+			#region Fallen-8 REST API
 
-            #region api
+            IFallen8Service fallen8RESTService;
+            server.TryStartService(out fallen8RESTService, "Fallen-8_REST_Service", new Dictionary<string, object>
+                                     {
+                                         {"IPAddress", IPAddress.Parse(Server.Default.IPAdress)},
+                                         {"Port", Server.Default.Port}
+                                     });
+			
+			#endregion
+			
+            #region intro api
 
             var restServiceProperties = new Dictionary<string, object>
                                      {
                                          {"IPAddress", IPAddress.Parse(Server.Default.IPAdress)},
                                          {"Port", Server.Default.Port}
                                      };
-            IFallen8Service service;
-            server.TryStartService(out service, "IntroRESTService", restServiceProperties);
+            IFallen8Service introService;
+            server.TryStartService(out introService, "IntroRESTService", restServiceProperties);
 
             #endregion
-
+			
             Console.WriteLine("Started services:");
             foreach (var aService in server.Services)
             {
