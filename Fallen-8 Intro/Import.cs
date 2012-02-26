@@ -67,7 +67,7 @@ namespace Intro
 
             String word;
             Int32 w_id;
-            var creationDate = DateTime.Now;
+            var creationDate = Constants.ConvertDateTime(DateTime.Now);
             VertexModel vertex;
 
             sb.AppendLine(String.Format("importing {0} words from {1}", GetMySqlRowCount(mySql, tableName), tableName));
@@ -101,7 +101,7 @@ namespace Intro
 
             var sb = new StringBuilder();
 
-            var creationDate = DateTime.Now;
+            var creationDate = Constants.ConvertDateTime(DateTime.Now);
             Int32 w1_id;
             Int32 w2_id;
             Int32 freq;

@@ -14,7 +14,7 @@ namespace Intro
     {
         public static void ProfilerTest(Fallen8.API.Fallen8 fallen8)
         {
-            var creationDate = DateTime.Now;
+            var creationDate = Constants.ConvertDateTime(DateTime.Now);
 
             var a = fallen8.CreateVertex(creationDate);
             var b = fallen8.CreateVertex(creationDate);
@@ -27,7 +27,7 @@ namespace Intro
 
         public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8.API.Fallen8 fallen8)
         {
-            var creationDate = DateTime.Now;
+            var creationDate =  Constants.ConvertDateTime(DateTime.Now);
             var vertexIDs = new List<Int32>();
             var prng = new Random();
 
