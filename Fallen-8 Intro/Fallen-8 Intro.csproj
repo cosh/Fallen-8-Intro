@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,9 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Intro</RootNamespace>
     <AssemblyName>Fallen-8Intro</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -50,9 +47,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mysql.data, Version=6.4.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\Dependencies\mysql.data.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -63,6 +57,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="MySql.Data, Version=6.4.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
+      <HintPath>..\Dependencies\mysql.data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Benchmark.cs" />
@@ -77,10 +74,8 @@
       <DependentUpon>Server.settings</DependentUpon>
     </Compile>
     <Compile Include="Service\IntroService.cs" />
-    <Compile Include="Service\IEquallyDistributed.cs" />
     <Compile Include="Service\IIntroService.cs" />
     <Compile Include="Service\IntroServicePlugin.cs" />
-    <Compile Include="Service\IWortschatz.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dependencies\Fallen-8\Dependencies\FastSerializer\FastSerializer.csproj">
@@ -89,7 +84,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Dependencies\Fallen-8\Fallen-8\Fallen-8.csproj">
       <Project>{40759EF1-EBF9-41A3-BFEB-1314ABE36489}</Project>
-      <Name>Fallen-8 %28Dependencies\Fallen-8\Fallen-8%29</Name>
+      <Name>Fallen-8</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

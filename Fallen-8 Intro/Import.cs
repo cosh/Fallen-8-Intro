@@ -50,10 +50,14 @@ namespace Intro
 
             #endregion
 
-            GC.Collect();
+			#if __MonoCS__
+ 			//mono specific code
+			#else 
+ 			GC.Collect();
             GC.Collect();
             GC.WaitForFullGCApproach();
-
+			#endif
+			
             return sb.ToString();
         }
 
@@ -67,7 +71,7 @@ namespace Intro
 
             String word;
             Int32 w_id;
-            var creationDate = DateTime.Now;
+            var creationDate = Constants.ConvertDateTime(DateTime.Now);
             VertexModel vertex;
 
             sb.AppendLine(String.Format("importing {0} words from {1}", GetMySqlRowCount(mySql, tableName), tableName));
@@ -101,7 +105,7 @@ namespace Intro
 
             var sb = new StringBuilder();
 
-            var creationDate = DateTime.Now;
+            var creationDate = Constants.ConvertDateTime(DateTime.Now);
             Int32 w1_id;
             Int32 w2_id;
             Int32 freq;
