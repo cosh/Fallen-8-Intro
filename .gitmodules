@@ -1,0 +1,3 @@
+[submodule "Dependencies/Fallen-8"]
+	path = Dependencies/Fallen-8
+	url = git@github.com:cosh/fallen-8.git
