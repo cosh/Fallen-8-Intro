@@ -108,12 +108,15 @@ namespace Intro
 
                         for (var i = range.Item1; i < range.Item2; i++)
                         {
-                                foreach (var aFriend in vertices[i].GetAllNeighbors())
-                                {
-                                    localCount++;
-
-                                }
-                            
+							ReadOnlyCollection<EdgeModel> outEdge;
+							if (vertices[i].TryGetOutEdge(out outEdge, 0)) 
+							{
+								for (int j = 0; j < outEdge.Count; j++) 
+								{
+									var vertex = outEdge[j].TargetVertex;
+									localCount++;
+								}
+							}
                         }
 
                         return localCount;
