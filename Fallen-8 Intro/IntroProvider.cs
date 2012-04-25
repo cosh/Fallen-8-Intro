@@ -34,15 +34,15 @@ namespace Intro
 
             for (var i = 0; i < nodeCound; i++)
             {
-                vertexIDs.Add(
-                    fallen8.CreateVertex(creationDate, new PropertyContainer[4]
-                                                           {
-                                                               new PropertyContainer { PropertyId = 23, Value = 4344 },
-                                                               new PropertyContainer { PropertyId = 24, Value = "Ein gaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaanz langes Property" },
-                                                               new PropertyContainer { PropertyId = 25, Value = "Ein kurzes Property" },
-                                                               new PropertyContainer { PropertyId = 26, Value = "Ein gaaaaaaaanz langes Property" },
-                                                           }).Id);
-                //vertexIDs.Add(fallen8.CreateVertex(creationDate).Id);
+//                vertexIDs.Add(
+//                    fallen8.CreateVertex(creationDate, new PropertyContainer[4]
+//                                                           {
+//                                                               new PropertyContainer { PropertyId = 23, Value = 4344 },
+//                                                               new PropertyContainer { PropertyId = 24, Value = "Ein gaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaanz langes Property" },
+//                                                               new PropertyContainer { PropertyId = 25, Value = "Ein kurzes Property" },
+//                                                               new PropertyContainer { PropertyId = 26, Value = "Ein gaaaaaaaanz langes Property" },
+//                                                           }).Id);
+                vertexIDs.Add(fallen8.CreateVertex(creationDate).Id);
                         
             }
 
@@ -74,12 +74,14 @@ namespace Intro
             var tps = new List<double>();
             long edgeCount = 0;
             var sb = new StringBuilder();
-
+			
+			Int32 range = ((vertices.Count/Environment.ProcessorCount)*3)/2;
+			
             for (var i = 0; i < myIterations; i++)
             {
                 var sw = Stopwatch.StartNew();
 
-                edgeCount = CountAllEdgesParallelPartitioner(vertices);
+                edgeCount = CountAllEdgesParallelPartitioner(vertices, range);
 
                 sw.Stop();
 
@@ -91,11 +93,11 @@ namespace Intro
             return sb.ToString();
         }
 
-        private static long CountAllEdgesParallelPartitioner(ReadOnlyCollection<VertexModel> vertices)
+        private static long CountAllEdgesParallelPartitioner(ReadOnlyCollection<VertexModel> vertices, Int32 vertexRange)
         {
             var lockObject = new object();
             var edgeCount = 0L;
-            var rangePartitioner = Partitioner.Create(0, vertices.Count, 10000);
+            var rangePartitioner = Partitioner.Create(0, vertices.Count, vertexRange);
 
             Parallel.ForEach(
                 rangePartitioner,
