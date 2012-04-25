@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Fallen8.API.Helper;
 using Fallen8.API.Model;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace Intro
 {
@@ -94,7 +95,7 @@ namespace Intro
         {
             var lockObject = new object();
             var edgeCount = 0L;
-            var rangePartitioner = Partitioner.Create(0, vertices.Count);
+            var rangePartitioner = Partitioner.Create(0, vertices.Count, 10000);
 
             Parallel.ForEach(
                 rangePartitioner,
@@ -105,19 +106,12 @@ namespace Intro
 
                         for (var i = range.Item1; i < range.Item2; i++)
                         {
-                            ReadOnlyCollection<EdgeModel> epm;
-
-                            if (vertices[i].TryGetOutEdge(out epm, 0))
-                            {
-                                foreach (var aOutGoingEdge in epm)
+                                foreach (var aFriend in vertices[i].GetAllNeighbors())
                                 {
-                                    var vertex = aOutGoingEdge.TargetVertex;
                                     localCount++;
 
                                 }
-                            }
-
-
+                            
                         }
 
                         return localCount;
