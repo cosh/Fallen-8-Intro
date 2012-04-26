@@ -102,25 +102,24 @@ namespace Intro
             Parallel.ForEach(
                 rangePartitioner,
                 () => 0L,
-                (range, loopstate, initialValue) =>
+                delegate(Tuple<int, int> range, ParallelLoopState loopstate, long initialValue)
                     {
                         var localCount = initialValue;
 
                         for (var i = range.Item1; i < range.Item2; i++)
                         {
-							ReadOnlyCollection<EdgeModel> outEdge;
-							if (vertices[i].TryGetOutEdge(out outEdge, 0)) 
-							{
-								for (int j = 0; j < outEdge.Count; j++) 
-								{
-									var vertex = outEdge[j].TargetVertex;
-									localCount++;
-								}
-							}
+                            ReadOnlyCollection<EdgeModel> outEdge;
+                            if (vertices[i].TryGetOutEdge(out outEdge, 0))
+                            {
+                                for (int j = 0; j < outEdge.Count; j++)
+                                {
+                                    var vertex = outEdge[j].TargetVertex;
+                                    localCount++;
+                                }
+                            }
                         }
 
                         return localCount;
-
                     },
                 delegate(long localSum)
                     {
