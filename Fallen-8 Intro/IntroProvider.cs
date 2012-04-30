@@ -15,7 +15,7 @@ namespace Intro
     {
         public static void ProfilerTest(Fallen8.API.Fallen8 fallen8)
         {
-            var creationDate = Constants.ConvertDateTime(DateTime.Now);
+            var creationDate = DateHelper.ConvertDateTime(DateTime.Now);
 
             var a = fallen8.CreateVertex(creationDate);
             var b = fallen8.CreateVertex(creationDate);
@@ -28,7 +28,7 @@ namespace Intro
 
         public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8.API.Fallen8 fallen8)
         {
-            var creationDate =  Constants.ConvertDateTime(DateTime.Now);
+            var creationDate = DateHelper.ConvertDateTime(DateTime.Now);
             var vertexIDs = new List<Int32>();
             var prng = new Random();
 
@@ -93,7 +93,7 @@ namespace Intro
             return sb.ToString();
         }
 
-        private static long CountAllEdgesParallelPartitioner(ReadOnlyCollection<VertexModel> vertices, Int32 vertexRange)
+        private static long CountAllEdgesParallelPartitioner(List<VertexModel> vertices, Int32 vertexRange)
         {
             var lockObject = new object();
             var edgeCount = 0L;
