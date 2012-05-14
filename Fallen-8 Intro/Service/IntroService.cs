@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.ServiceModel;
 using System.Text;
 using Fallen8.API.Index;
 
 namespace Intro.Service
 {
+    [ServiceBehavior(ConcurrencyMode = ConcurrencyMode.Multiple)]
     public sealed class IntroService : IIntroService, IDisposable
     {
         #region Data

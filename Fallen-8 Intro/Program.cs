@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using Fallen8.API;
 using Fallen8.API.Service;
 
 namespace Intro
@@ -14,7 +13,7 @@ namespace Intro
 
             #region Fallen-8 startup
 
-            var server = new Fallen8Server();
+            var fallen8 = new Fallen8.API.Fallen8();
 
             #endregion
 
@@ -23,7 +22,7 @@ namespace Intro
 			#region Fallen-8 REST API
 
             IFallen8Service fallen8RESTService;
-            server.TryStartService(out fallen8RESTService, "Fallen-8_REST_Service", new Dictionary<string, object>
+            fallen8.ServiceFactory.TryStartService(out fallen8RESTService, "Fallen-8_REST_Service", "Built-In API",  new Dictionary<string, object>
                                      {
                                          {"IPAddress", IPAddress.Parse(Server.Default.IPAdress)},
                                          {"Port", Server.Default.Port}
@@ -39,15 +38,9 @@ namespace Intro
                                          {"Port", Server.Default.Port}
                                      };
             IFallen8Service introService;
-            server.TryStartService(out introService, "IntroRESTService", restServiceProperties);
+            fallen8.ServiceFactory.TryStartService(out introService, "IntroRESTService", "Intro API", restServiceProperties);
 
             #endregion
-			
-            Console.WriteLine("Started services:");
-            foreach (var aService in server.Services)
-            {
-                Console.WriteLine(aService.Description);
-            }
 
             #endregion
 
@@ -66,7 +59,7 @@ namespace Intro
             }
 
             Console.WriteLine("Shutting down Fallen-8 intro");
-            server.Shutdown();
+            fallen8.Shutdown();
             Console.WriteLine("Shutdown complete");
 
             #endregion
