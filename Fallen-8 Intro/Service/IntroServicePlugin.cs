@@ -59,6 +59,16 @@ namespace Intro.Service
         /// </summary>
         private UInt16 _port;
 
+        /// <summary>
+        /// The URI of the service
+        /// </summary>
+        private Uri _uri;
+
+        /// <summary>
+        /// REST service address
+        /// </summary>
+        private String _restServiceAddress;
+
         #endregion
 
         #region constructor
@@ -93,6 +103,33 @@ namespace Intro.Service
         {
             _service.Shutdown();
             _host.Close();
+
+            return true;
+        }
+
+        public bool TryStart()
+        {
+            try
+            {
+                if (!_isRunning)
+                {
+                    _host.Open();
+
+                    _isRunning = true;
+                    _startTime = DateTime.Now;
+                    Logger.LogInfo(_description + Environment.NewLine + "   -> Service is started at " + _uri + "/" + _restServiceAddress);   
+                }
+                else
+                {
+                    Logger.LogInfo(_description + Environment.NewLine + "   -> Service is already started at " + _uri + "/" + _restServiceAddress);                       
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogError(String.Format("Could not start service \"{0}\".{1}{2}", this.PluginName, Environment.NewLine, e.Message));
+
+                return false;
+            }
 
             return true;
         }
@@ -179,16 +216,16 @@ namespace Intro.Service
         /// <param name="fallen8"> Fallen-8 instance </param>
         private void StartService(Fallen8.API.Fallen8 fallen8)
         {
-            var uri = new Uri("http://" + _address + ":" + _port + "/" + _uriPattern);
+            _uri = new Uri("http://" + _address + ":" + _port + "/" + _uriPattern);
 
-            if (!uri.IsWellFormedOriginalString())
+            if (!_uri.IsWellFormedOriginalString())
                 throw new Exception("The URI Pattern is not well formed!");
 
             _service = new IntroService(fallen8);
 
-            _host = new ServiceHost(_service, uri);
+            _host = new ServiceHost(_service, _uri);
 
-            const string restServiceAddress = "REST";
+            _restServiceAddress = "REST";
 
             try
             {
@@ -211,7 +248,7 @@ namespace Intro.Service
 
                 binding.ReaderQuotas = readerQuotas;
 
-                var se = _host.AddServiceEndpoint(typeof(IIntroService), binding, restServiceAddress);
+                var se = _host.AddServiceEndpoint(typeof(IIntroService), binding, _restServiceAddress);
                 var webBehav = new WebHttpBehavior
                 {
                     HelpEnabled = true
@@ -220,18 +257,12 @@ namespace Intro.Service
 
                 ((ServiceBehaviorAttribute)_host.Description.Behaviors[typeof(ServiceBehaviorAttribute)]).
                     InstanceContextMode = InstanceContextMode.Single;
-
-                _host.Open();
             }
             catch (CommunicationException)
             {
                 _host.Abort();
                 throw;
             }
-
-            _isRunning = true;
-            _startTime = DateTime.Now;
-            Logger.LogInfo(_description + Environment.NewLine + "   -> Service is started at " + uri + "/" + restServiceAddress);
         }
 
         #endregion
