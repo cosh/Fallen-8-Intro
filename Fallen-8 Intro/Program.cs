@@ -21,7 +21,7 @@ namespace Intro
 			
 			#region Fallen-8 REST API
 
-            IFallen8Service fallen8RESTService;
+            IService fallen8RESTService;
             fallen8.ServiceFactory.TryStartService(out fallen8RESTService, "Fallen-8_REST_Service", "Built-In API",  new Dictionary<string, object>
                                      {
                                          {"IPAddress", IPAddress.Parse(Server.Default.IPAdress)},
@@ -37,7 +37,7 @@ namespace Intro
                                          {"IPAddress", IPAddress.Parse(Server.Default.IPAdress)},
                                          {"Port", Server.Default.Port}
                                      };
-            IFallen8Service introService;
+            IService introService;
             fallen8.ServiceFactory.TryStartService(out introService, "IntroRESTService", "Intro API", restServiceProperties);
 
             #endregion

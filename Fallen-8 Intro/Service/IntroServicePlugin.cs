@@ -10,7 +10,7 @@ using Framework.Serialization;
 
 namespace Intro.Service
 {
-    public sealed class IntroServicePlugin : IFallen8Service
+    public sealed class IntroServicePlugin : IService
     {
         #region Data
 
@@ -129,7 +129,7 @@ namespace Intro.Service
 
         public Type PluginCategory
         {
-            get { return typeof(IFallen8Service); }
+            get { return typeof(IService); }
         }
 
         public string Description
