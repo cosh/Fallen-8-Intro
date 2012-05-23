@@ -145,7 +145,7 @@ namespace Intro.Service
             writer.Write(_port);
         }
 
-        public void Open(SerializationReader reader, Fallen8.API.Fallen8 fallen8)
+        public void Load(SerializationReader reader, Fallen8.API.Fallen8 fallen8)
         {
             _uriPattern = reader.ReadString();
             _address = IPAddress.Parse(reader.ReadString());
@@ -223,8 +223,10 @@ namespace Intro.Service
 
             _service = new IntroService(fallen8);
 
-            _host = new ServiceHost(_service, _uri);
-
+            _host = new ServiceHost(_service, _uri)
+                        {
+                            CloseTimeout = new TimeSpan(0, 0, 0, 0, 50)
+                        };
             _restServiceAddress = "REST";
 
             try
