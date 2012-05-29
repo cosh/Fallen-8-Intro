@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.ServiceModel;
 using System.Text;
-using Fallen8.API.Index;
+using NoSQL.GraphDB;
+using NoSQL.GraphDB.Index;
 
 namespace Intro.Service
 {
@@ -16,7 +16,7 @@ namespace Intro.Service
         /// <summary>
         ///   The internal Fallen-8 instance
         /// </summary>
-        private readonly Fallen8.API.Fallen8 _fallen8;
+        private readonly Fallen8 _fallen8;
 
         /// <summary>
         /// The indexName
@@ -31,7 +31,7 @@ namespace Intro.Service
         /// Creates a new import service
         /// </summary>
         /// <param name="fallen8"></param>
-        public IntroService(Fallen8.API.Fallen8 fallen8)
+        public IntroService(Fallen8 fallen8)
         {
             _fallen8 = fallen8;
         }
@@ -55,7 +55,7 @@ namespace Intro.Service
             var totalBytesOfMemoryUsed = currentProcess.WorkingSet64 / 1024 / 1024;
 
             sb.AppendLine(String.Format("Memory consumption: {0} MB", totalBytesOfMemoryUsed));
-            sb.AppendLine(String.Format("Graph: |V| = {0} |E| = {1}", _fallen8.GetVertices().Count(), _fallen8.GetEdges().Count()));
+            sb.AppendLine(String.Format("Graph: |V| = {0} |E| = {1}", _fallen8.VertexCount, _fallen8.EdgeCount));
 
             return sb.ToString();
         }

@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using MySql.Data.MySqlClient;
-using Fallen8.API.Index;
-using Fallen8.API.Helper;
 using System.Diagnostics;
-using Fallen8.API.Model;
 using System.Text;
+using NoSQL.GraphDB;
+using NoSQL.GraphDB.Helper;
+using NoSQL.GraphDB.Index;
+using NoSQL.GraphDB.Model;
 
 namespace Intro
 {
     public class Import
     {
-        public static String ImportFromMySql(Fallen8.API.Fallen8 myFallen8, SingleValueIndex nodeIndex)
+        public static String ImportFromMySql(Fallen8 myFallen8, SingleValueIndex nodeIndex)
         {            
             #region Connect to MySql
 
@@ -61,7 +61,7 @@ namespace Intro
             return sb.ToString();
         }
 
-        private static string ReadWords(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, IIndex nodeIndex, String tableName)
+        private static string ReadWords(Fallen8 myFallen8, MySqlConnection mySql, IIndex nodeIndex, String tableName)
         {            
             // query
             var query = mySql.CreateCommand();
@@ -97,7 +97,7 @@ namespace Intro
             return sb.ToString();
         }
 
-        private static string ReadCooccurrences(Fallen8.API.Fallen8 myFallen8, MySqlConnection mySql, SingleValueIndex nodeIdx, String tableName, UInt16 edgePropertyID)
+        private static string ReadCooccurrences(Fallen8 myFallen8, MySqlConnection mySql, SingleValueIndex nodeIdx, String tableName, UInt16 edgePropertyID)
         {
             // query
             var query = mySql.CreateCommand();

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fallen8.API.Index;
 using System.Diagnostics;
-using Fallen8.API.Model;
 using System.Collections.ObjectModel;
+using NoSQL.GraphDB;
+using NoSQL.GraphDB.Index;
+using NoSQL.GraphDB.Model;
 
 namespace Intro
 {
@@ -94,7 +95,7 @@ namespace Intro
 
         }
 
-        public static List<double> RunQuery2(Fallen8.API.Fallen8 myFallen8, String wordIndexName)
+        public static List<double> RunQuery2(Fallen8 myFallen8, String wordIndexName)
         {
             var nodeIndex = (SingleValueIndex)myFallen8.IndexFactory.Indices[wordIndexName];
             var totalMilliseconds = new List<double>();
@@ -118,7 +119,7 @@ namespace Intro
             return totalMilliseconds;
         }
 
-        public static List<double> RunQuery3(Fallen8.API.Fallen8 myFallen8, String nodeIndexName)
+        public static List<double> RunQuery3(Fallen8 myFallen8, String nodeIndexName)
         {
             var nodeIndex = (SingleValueIndex)myFallen8.IndexFactory.Indices[nodeIndexName];
             var totalMilliseconds = new List<double>();

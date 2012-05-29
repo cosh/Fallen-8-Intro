@@ -4,9 +4,10 @@ using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Xml;
-using Fallen8.API.Log;
-using Fallen8.API.Service;
 using Framework.Serialization;
+using NoSQL.GraphDB;
+using NoSQL.GraphDB.Log;
+using NoSQL.GraphDB.Service;
 
 namespace Intro.Service
 {
@@ -145,7 +146,7 @@ namespace Intro.Service
             writer.Write(_port);
         }
 
-        public void Load(SerializationReader reader, Fallen8.API.Fallen8 fallen8)
+        public void Load(SerializationReader reader, Fallen8 fallen8)
         {
             _uriPattern = reader.ReadString();
             _address = IPAddress.Parse(reader.ReadString());
@@ -179,7 +180,7 @@ namespace Intro.Service
             get { return "Henning Rauch"; }
         }
 
-        public void Initialize(Fallen8.API.Fallen8 fallen8, IDictionary<string, object> parameter)
+        public void Initialize(Fallen8 fallen8, IDictionary<string, object> parameter)
         {
             _uriPattern = "Intro";
             if (parameter != null && parameter.ContainsKey("URIPattern"))
@@ -214,7 +215,7 @@ namespace Intro.Service
         ///   Start the intro service
         /// </summary>
         /// <param name="fallen8"> Fallen-8 instance </param>
-        private void StartService(Fallen8.API.Fallen8 fallen8)
+        private void StartService(Fallen8 fallen8)
         {
             _uri = new Uri("http://" + _address + ":" + _port + "/" + _uriPattern);
 

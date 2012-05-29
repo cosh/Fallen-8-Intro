@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
-using Fallen8.API.Helper;
-using Fallen8.API.Model;
 using System.Collections.ObjectModel;
-using System.Threading;
+using NoSQL.GraphDB;
+using NoSQL.GraphDB.Helper;
+using NoSQL.GraphDB.Model;
 
 namespace Intro
 {
     public static class IntroProvider
     {
-        public static void ProfilerTest(Fallen8.API.Fallen8 fallen8)
+        public static void ProfilerTest(Fallen8 fallen8)
         {
             var creationDate = DateHelper.ConvertDateTime(DateTime.Now);
 
@@ -26,7 +26,7 @@ namespace Intro
             }
         }
 
-        public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8.API.Fallen8 fallen8)
+        public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8 fallen8)
         {
             var creationDate = DateHelper.ConvertDateTime(DateTime.Now);
             var vertexIDs = new List<Int32>();
@@ -68,7 +68,7 @@ namespace Intro
             }
         }
 
-        public static String Bench(Fallen8.API.Fallen8 fallen8, int myIterations = 1000)
+        public static String Bench(Fallen8 fallen8, int myIterations = 1000)
         {
             var vertices = fallen8.GetVertices();
             var tps = new List<double>();

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using Fallen8.API.Service;
+using NoSQL.GraphDB;
+using NoSQL.GraphDB.Service;
 
 namespace Intro
 {
@@ -13,7 +14,7 @@ namespace Intro
 
             #region Fallen-8 startup
 
-            var fallen8 = new Fallen8.API.Fallen8();
+            var fallen8 = new Fallen8();
 
             #endregion
 
