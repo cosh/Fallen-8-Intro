@@ -24,7 +24,7 @@ namespace Intro
 
             fallen8.ServiceFactory.StartGraphService(IPAddress.Parse(Server.Default.IPAdress), Server.Default.Port);
 
-            fallen8.ServiceFactory.StartAdminService(IPAddress.Parse(Server.Default.IPAdress), Server.Default.Port, "admin", "password");
+            fallen8.ServiceFactory.StartAdminService(IPAddress.Parse(Server.Default.IPAdress), Server.Default.Port);
 
 			#endregion
 			
