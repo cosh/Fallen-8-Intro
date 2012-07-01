@@ -29,7 +29,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query2(VertexModel startVertex, Int32 myEdgePropertyID)
+        private static void Query2(VertexModel startVertex, UInt16 myEdgePropertyID)
         {            
             Object sig;
             Object freq;
@@ -56,7 +56,7 @@ namespace Intro
         /// </summary>
         /// <param name="startVertex"></param>
         /// <param name="myEdgePropertyID"></param>
-        private static void Query3(VertexModel startVertex, Int32 myEdgePropertyID)
+        private static void Query3(VertexModel startVertex, UInt16 myEdgePropertyID)
         {
             Object sig;
             Object freq;
