@@ -55,15 +55,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="MySql.Data, Version=6.4.4.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d">
-      <HintPath>..\Dependencies\mysql.data.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Benchmark.cs" />
-    <Compile Include="Config.cs" />
     <Compile Include="IntroProvider.cs" />
-    <Compile Include="Import.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.Designer.cs">
@@ -87,7 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config" />
     <None Include="Program.manifest" />
     <None Include="Server.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
