@@ -13,19 +13,12 @@ namespace Intro
 {
     public static class IntroProvider
     {
-        public static void ProfilerTest(Fallen8 fallen8)
-        {
-            var creationDate = DateHelper.ConvertDateTime(DateTime.Now);
-
-            var a = fallen8.CreateVertex(creationDate);
-            var b = fallen8.CreateVertex(creationDate);
-
-            for (int i = 0; i < 1000; i++)
-            {
-                fallen8.CreateEdge(a.Id, 0, b.Id, creationDate);
-            }
-        }
-
+        /// <summary>
+        /// Creates a scale free network
+        /// </summary>
+        /// <param name="nodeCound"></param>
+        /// <param name="edgeCount"></param>
+        /// <param name="fallen8"></param>
         public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8 fallen8)
         {
             var creationDate = DateHelper.ConvertDateTime(DateTime.Now);
@@ -68,6 +61,12 @@ namespace Intro
             }
         }
 
+        /// <summary>
+        /// Benchmark
+        /// </summary>
+        /// <param name="fallen8"></param>
+        /// <param name="myIterations"></param>
+        /// <returns></returns>
         public static String Bench(Fallen8 fallen8, int myIterations = 1000)
         {
             var vertices = fallen8.GetVertices();
@@ -93,6 +92,12 @@ namespace Intro
             return sb.ToString();
         }
 
+        /// <summary>
+        /// Counter
+        /// </summary>
+        /// <param name="vertices"></param>
+        /// <param name="vertexRange"></param>
+        /// <returns></returns>
         private static long CountAllEdgesParallelPartitioner(List<VertexModel> vertices, Int32 vertexRange)
         {
             var lockObject = new object();

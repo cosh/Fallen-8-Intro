@@ -17,12 +17,7 @@ namespace Intro.Service
         ///   The internal Fallen-8 instance
         /// </summary>
         private readonly Fallen8 _fallen8;
-
-        /// <summary>
-        /// The indexName
-        /// </summary>
-        private const String _wordIndexName = "word_idx";
-
+        
         #endregion
 
         #region constructor
@@ -37,31 +32,7 @@ namespace Intro.Service
         }
 
         #endregion
-
-        #region IIntroService Members
-
-        public void Clear()
-        {
-            _fallen8.TabulaRasa();
-        }
-
-        public String Status()
-        {
-            var sb = new StringBuilder();
-
-            _fallen8.Trim();
-
-            var currentProcess = Process.GetCurrentProcess();
-            var totalBytesOfMemoryUsed = currentProcess.WorkingSet64 / 1024 / 1024;
-
-            sb.AppendLine(String.Format("Memory consumption: {0} MB", totalBytesOfMemoryUsed));
-            sb.AppendLine(String.Format("Graph: |V| = {0} |E| = {1}", _fallen8.VertexCount, _fallen8.EdgeCount));
-
-            return sb.ToString();
-        }
-
-        #endregion
-
+        
         #region public methods
 
         /// <summary>
@@ -70,38 +41,6 @@ namespace Intro.Service
         public void Shutdown()
         {
             //nothing to do atm
-        }
-
-        #endregion
-
-        #region IWortschatz Members
-
-        public string ImportWortschatz()
-        {
-            IIndex index;
-            _fallen8.IndexFactory.TryCreateIndex(out index, _wordIndexName, "SingleValueIndex");
-
-            return Import.ImportFromMySql(_fallen8, (SingleValueIndex)index);
-        }
-
-        public List<double> ExecuteQuery(string queryIdentifier)
-        {
-            switch (queryIdentifier)
-            {
-                case "Q2":
-                    return Benchmark.RunQuery2(_fallen8, _wordIndexName);
-
-                case "Q3":
-                    return Benchmark.RunQuery3(_fallen8, _wordIndexName);
-
-                default:
-                    return null;
-            }
-        }
-
-        public List<string> GetAvailableQueries()
-        {
-            return new List<string> {"Q2", "Q3"};
         }
 
         #endregion

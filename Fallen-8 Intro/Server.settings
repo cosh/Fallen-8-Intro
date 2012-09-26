@@ -8,17 +8,5 @@
     <Setting Name="Port" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">2323</Value>
     </Setting>
-    <Setting Name="WortSchatzDBHOST" Type="System.String" Scope="User">
-      <Value Profile="(Default)">localhost</Value>
-    </Setting>
-    <Setting Name="User" Type="System.String" Scope="User">
-      <Value Profile="(Default)">root</Value>
-    </Setting>
-    <Setting Name="Password" Type="System.String" Scope="User">
-      <Value Profile="(Default)">password</Value>
-    </Setting>
-    <Setting Name="WortschatzDatabase" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Wortschatz</Value>
-    </Setting>
   </Settings>
 </SettingsFile>
