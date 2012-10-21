@@ -186,11 +186,11 @@ namespace Intro.Service
             if (parameter != null && parameter.ContainsKey("URIPattern"))
                 _uriPattern = (String)Convert.ChangeType(parameter["URIPattern"], typeof(String));
 
-            _address = IPAddress.Loopback;
+            _address = IPAddress.Any;
             if (parameter != null && parameter.ContainsKey("IPAddress"))
                 _address = (IPAddress)Convert.ChangeType(parameter["IPAddress"], typeof(IPAddress));
 
-            _port = 9923;
+            _port = 2323;
             if (parameter != null && parameter.ContainsKey("Port"))
                 _port = (ushort)Convert.ChangeType(parameter["Port"], typeof(ushort));
 
