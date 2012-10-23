@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fallen-8 Intro", "Fallen-8 Intro\Fallen-8 Intro.csproj", "{C82F83EC-6549-4087-8A53-8BD9D1B80956}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{312851FB-B8AB-4538-9346-3009E11219DC}"
