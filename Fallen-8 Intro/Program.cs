@@ -22,21 +22,15 @@ namespace Intro
 			
 			#region Fallen-8 REST API
 
-            fallen8.ServiceFactory.StartGraphService(IPAddress.Parse(Server.Default.IPAdress), Server.Default.Port);
-
-            fallen8.ServiceFactory.StartAdminService(IPAddress.Parse(Server.Default.IPAdress), Server.Default.Port);
+            fallen8.ServiceFactory.StartGraphService();
+            fallen8.ServiceFactory.StartAdminService();
 
 			#endregion
 			
             #region intro api
 
-            var restServiceProperties = new Dictionary<string, object>
-                                     {
-                                         {"IPAddress", IPAddress.Parse(Server.Default.IPAdress)},
-                                         {"Port", Server.Default.Port}
-                                     };
             IService introService;
-            fallen8.ServiceFactory.TryAddService(out introService, "IntroRESTService", "Intro API", restServiceProperties);
+            fallen8.ServiceFactory.TryAddService(out introService, "IntroRESTService", "Intro API", null);
             introService.TryStart();
 
             #endregion
