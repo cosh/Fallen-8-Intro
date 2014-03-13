@@ -17,6 +17,11 @@ namespace Intro.Service
         ///   The internal Fallen-8 instance
         /// </summary>
         private readonly Fallen8 _fallen8;
+
+		/// <summary>
+		/// The intro provider.
+		/// </summary>
+		private readonly IntroProvider _introProvider;
         
         #endregion
 
@@ -29,6 +34,7 @@ namespace Intro.Service
         public IntroService(Fallen8 fallen8)
         {
             _fallen8 = fallen8;
+			_introProvider = new IntroProvider (fallen8);
         }
 
         #endregion
@@ -49,10 +55,10 @@ namespace Intro.Service
 
         public string CreateGraph(string nodeCount, string edgeCount)
         {
-            var sw = Stopwatch.StartNew();
 
+			var sw = Stopwatch.StartNew();
 
-            IntroProvider.CreateScaleFreeNetwork(Convert.ToInt32(nodeCount), Convert.ToInt32(edgeCount), _fallen8);
+			_introProvider.CreateScaleFreeNetwork(Convert.ToInt32(nodeCount), Convert.ToInt32(edgeCount));
 
             sw.Stop();
 
@@ -69,7 +75,7 @@ namespace Intro.Service
 
         public string Bench(string iterations)
         {
-            return IntroProvider.Bench(_fallen8, Convert.ToInt32(iterations));
+			return _introProvider.Bench(Convert.ToInt32(iterations));
         }
 
         #endregion

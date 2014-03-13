@@ -5,25 +5,41 @@ using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NoSQL.GraphDB;
 using NoSQL.GraphDB.Helper;
 using NoSQL.GraphDB.Model;
 
 namespace Intro
 {
-    public static class IntroProvider
+	public class IntroProvider
     {
+
+		private List<VertexModel> _toBeBenchenVertices = null;
+		private int _numberOfToBeTestedVertices = 10000000; 
+		private Fallen8 _f8;
+
+		public IntroProvider (Fallen8 fallen8)
+		{
+			_f8 = fallen8;
+		}
+
         /// <summary>
         /// Creates a scale free network
         /// </summary>
         /// <param name="nodeCound"></param>
         /// <param name="edgeCount"></param>
         /// <param name="fallen8"></param>
-        public static void CreateScaleFreeNetwork(int nodeCound, int edgeCount, Fallen8 fallen8)
+        public void CreateScaleFreeNetwork(int nodeCound, int edgeCount)
         {
             var creationDate = DateHelper.ConvertDateTime(DateTime.Now);
             var vertexIDs = new List<Int32>();
             var prng = new Random();
+			if (nodeCound < _numberOfToBeTestedVertices) {
+				_numberOfToBeTestedVertices = nodeCound;
+			}
+
+			_toBeBenchenVertices = new List<VertexModel> (_numberOfToBeTestedVertices);
 
             for (var i = 0; i < nodeCound; i++)
             {
@@ -35,7 +51,7 @@ namespace Intro
 //                                                               new PropertyContainer { PropertyId = 25, Value = "Ein kurzes Property" },
 //                                                               new PropertyContainer { PropertyId = 26, Value = "Ein gaaaaaaaanz langes Property" },
 //                                                           }).Id);
-                vertexIDs.Add(fallen8.CreateVertex(creationDate).Id);
+				vertexIDs.Add(_f8.CreateVertex(creationDate).Id);
                         
             }
 
@@ -56,10 +72,26 @@ namespace Intro
 //                                                               new PropertyContainer { PropertyId = 1, Value = 2 },
 //                                                           });
 //
-                   fallen8.CreateEdge(aVertexId, 0, aTargetVertex, creationDate);
+					_f8.CreateEdge(aVertexId, 0, aTargetVertex, creationDate);
                 }
             }
+
+			_toBeBenchenVertices.AddRange (PickInterestingIDs (vertexIDs, prng)
+				.Select (aId => {
+					VertexModel v = null;
+
+					_f8.TryGetVertex(out v, aId);
+
+					return v;
+			}));
         }
+
+		IEnumerable<int> PickInterestingIDs (List<int> vertexIDs, Random prng)
+		{
+			for (int i = 0; i < _numberOfToBeTestedVertices; i++) {
+				yield return vertexIDs [prng.Next (0, vertexIDs.Count)];
+			}
+		}
 
         /// <summary>
         /// Benchmark
@@ -67,9 +99,13 @@ namespace Intro
         /// <param name="fallen8"></param>
         /// <param name="myIterations"></param>
         /// <returns></returns>
-        public static String Bench(Fallen8 fallen8, int myIterations = 1000)
+		public String Bench(int myIterations = 1000)
         {
-            var vertices = fallen8.GetVertices();
+			if (_toBeBenchenVertices == null) {
+				return "No vertices available";
+			}
+
+			List<VertexModel> vertices = _toBeBenchenVertices;
             var tps = new List<double>();
             long edgeCount = 0;
             var sb = new StringBuilder();
