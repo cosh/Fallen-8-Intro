@@ -100,6 +100,11 @@ namespace Intro.Service
             get { return _metaData; }
         }
 
+        public void OnServiceRestart()
+        {
+            //do nothing
+        }
+
         public bool TryStop()
         {
             _service.Shutdown();
